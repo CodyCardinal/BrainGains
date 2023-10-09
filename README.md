@@ -1,44 +1,47 @@
 # BRAIN GAINS
 
+![Brain Gains Art](https://github.com/CodyCardinal/BrainGains/blob/main/static/braingains.jpeg)
+
 Brain gains is my final project submission for CS50X! 
 I've used Python, Flask, SQLlite, and Bootstrap Javascript.
 
 ## [Video Demo](https://www.youtube.com/watch?v=qdZy8P7B4JA)
 
 ## How to start:
-Start by Initializing the DB ( you can also use this to reset! ):
-```py
-python init_db.py
-```
 
-Now going forward just run the website with flask!
+- Install Python 3.10+
+- Install the requirements with `pip install -r requirements.txt`
+- If you don't already have flashcards.db, then initialize the Database with `python init_db.py`
+- Run the flask app locally with `flask run`
+- Open your browser to `http://localhost:5000/`
 
-```py
-flask run
-```
+## What is Brain Gains?
 
+Brain Gains is a flashcard application designed for self-assessment in your learning journey. It adheres to the fundamental principles of the [Leitner System](https://en.wikipedia.org/wiki/Leitner_system).
 
-Brain Gains is following the basic methods of the [Leitner System](https://en.wikipedia.org/wiki/Leitner_system). Test yourself after learning so that you can retain whatever you learned better. The use of spacing in our learning can lead to better retention of information. This is because the brain is better at remembering things that are spaced out over time. The Leitner System is a way to organize that spacing. This is similar to how a muscle should be broken down, and given time to repair itself stronger.
+Typically, you would engage in a course, attend a lecture, or watch an online video. Later, either on the same day or the following day, you'd challenge yourself to recall what you've learned. This approach combines recall and spacing as integral elements of effective learning. Utilizing spacing in our learning process can enhance the retention of information. This is because our brains are more adept at retaining knowledge when it is revisited and reinforced at intervals over time. The Leitner System provides a structured method for implementing this spaced repetition technique. This concept is analogous to how muscles are exercised: they are broken down during workouts through repetitive stress repition, and then allowed time to recover and grow stronger. Similarly, our brains benefit from spaced review and reinforcement to optimize learning.
 
-![Leitner Learning System](https://github.com/CodyCardinal/CS50Final/blob/main/static/2560px-Leitner_system_alternative.svg.png?raw=true)
+![Leitner Learning System](https://github.com/CodyCardinal/BrainGains/blob/main/static/2560px-Leitner_system_alternative.svg.png)
 
 In the above method, questions are sorted into groups according to how easily the learner was able to recall the answer. The learners try to recall the solution written to a question. Clicking to reveal the answer. Depending how difficult it was to recall the answer, the learner can rate their recall difficulty. The recall rating then determines when the questions is asked again.
 
-![Animated gif of Leitner Learning System](https://github.com/CodyCardinal/CS50Final/blob/main/static/Leitner_system_animation.gif?raw=true)
+![Animated gif of Leitner Learning System](https://github.com/CodyCardinal/BrainGains/blob/main/static/Leitner_system_animation.gif?raw=true)
 
 In the above gif, we see that the first session starts with one container of questions. In the second session you're asked harder questions from the first session and the second containers questions. This process repeats until you're phased each question out into the final 5th container.
 
 
 ## Detailed How-To
 
-- Start by creating a few questions in a topic.
-- Once the topic has around 20 questions stop creating questions.
-- Go back to the home page and choose that topic.
+- While you are taking a course or lecture. You would create a new topic in Brain Gains.
+- Throughout that course, when you go to take notes, you would create a new question in Brain Gains in that topic.
+- Wait a few hours or overnight to practice recall.
+- Choose that topic on the home page.
 - Proceed to read each question, mentally answer the question.
-- Once you've answered it mentally, click to expand the answer.
+- Once you've answered it mentally, click the question button to expand the answer.
+- If you want to try again, click Again.
 - If you answered it correctly and easily, you would click Easy.
 - If you answered it correctly, but not easily, click Good.
 - If you failed to answer it, you would click Hard.
-- Then proceed to the next question. Eventually you will be taken back to the front page.
-- Come back and answer questions again tomorrow. Eventually you will notice that questions stop being offered to you.
-- Once you aren't asked questions anymore, you can consider quizzing on a new topic, because you've successfully recalled all of the questions.
+- Then proceed to the next question. Eventually you will be taken back to the front page once you've ehausted all questions in the topic.
+- Come back and answer questions again tomorrow. And you should then space out visits back to this topic over time. Use the Leitner System link for specific timing ( until I build in that feature! ). Over time you will notice that the questions you chose easy for will stop being offered to you.
+- Once you aren't asked any questions in that topic, you're done with that topic. It is now time for a new Topic!
