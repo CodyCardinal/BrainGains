@@ -40,6 +40,5 @@ In the above gif, we see that the first session starts with one container of que
 - If you answered it correctly, but not easily, click Good.
 - If you failed to answer it, you would click Hard.
 - Then proceed to the next question. Eventually you will be taken back to the front page.
-- 
 - Come back and answer questions again tomorrow. Eventually you will notice that questions stop being offered to you.
-- Once you aren't answered questions anymore, you can consider quizzing on a new topic.
+- Once you aren't asked questions anymore, you can consider quizzing on a new topic, because you've successfully recalled all of the questions.
