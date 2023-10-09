@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Index
+{% endblock %}
+
+{% block main %}
+<img src="/static/braingains.jpeg">
+
+{%if query %}
+<h1>Choose a Topic!</h1>
+{% for each in query %}
+<form action="/question/{{ each.TOPIC }}" method="POST">
+    <div class="btn-group-vertical" role="group">
+        <button class="btn btn-outline-dark">{{ each.TOPIC }}</button>
+        </button>
+    </div>
+</form>
+{% endfor %}
+{% else %}
+<form action="/create" method="GET">
+    <div class="btn-group-vertical" role="group">
+        <button class="btn btn-outline-dark">Create a Topic</button>
+        </button>
+    </div>
+</form>
+{% endif %}
+{% endblock %}

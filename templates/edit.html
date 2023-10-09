@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Edit Card
+{% endblock %}
+
+{% block main %}
+<form action="/edit/{{ question.id }}" method="POST">
+    <div class="form-row mx-auto" style="width: 500px;">
+        <div class="form-group col-md-6">
+            <label for="Topic">Topic</label>
+            <input type="text" class="form-control" id="Topic" name="Topic" value="{{ question.TOPIC }}">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="Score">Score</label>
+            <input type="number" min="1" max="5" class="form-control" id="Score" name="Score" value="{{ question.SCORE }}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="Question">Question</label>
+        <input type="text" class="form-control" id="Question" value="{{ question.QUESTION }}" name="Question">
+    </div>
+    <div class="form-group">
+        <label for="Answer">Answer</label>
+        <input type="text" class="form-control" id="Answer" value="{{ question.ANSWER }}" name="Answer">
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
+<br>
+<br>
+<form action="/delete/{{ question.id }}" method="POST" color="red">
+    <button type="submit" class="btn btn-danger" value="Delete">Delete</button>
+</form>
+{% endblock %}

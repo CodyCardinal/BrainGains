@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+List
+{% endblock %}
+
+{% block main %}
+<table class="table">
+    <thead>
+        <tr>
+            <th class="text-center">id</th>
+            <th class="text-center">Score</th>
+            <th class="text-center">Topic</th>
+            <th class="text-start">Question</th>
+            <th class="text-start">Answer</th>
+            <th class="text-center">Session</th>
+        </tr>
+    </thead>
+    {% for each in query %}
+    <tbody>
+        <tr>
+            <td class="text-center">
+                <a href="{{ url_for('edit', id=each.id) }}">{{ each.id }}</a>
+            </td>
+            <td class="text-center">{{ each.SCORE }}</td>
+            <td class="text-center">{{ each.TOPIC }}</td>
+            <td class="text-start">{{ each.QUESTION }}</td>
+            <td class="text-start">{{ each.ANSWER }}</td>
+            <td class="text-center">{{ each.SESH }}</td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
+{% endblock %}

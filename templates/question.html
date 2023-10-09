@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{ query.Topic }} : {{ query.id }}
+{% endblock %}
+
+{% block main %}
+
+
+
+<p>
+    click for answer -> <a class="btn btn-outline-dark btn-lrg" data-bs-toggle="collapse" href="#collapseExample"
+        role="button" aria-expanded="false" aria-controls="collapseExample">
+        {{ query.question}}
+    </a>
+</p>
+<div class="collapse" id="collapseExample">
+    <div class="card card-body">
+        {{ query.answer }}
+    </div>
+</div>
+
+<form action="/answer/{{ query.Topic }}/{{ query.id }}" method="POST">
+    <button name="Score" value=4 class="btn btn-primary">Again</button>
+    <button name="Score" value=3 class="btn btn-secondary">Hard</button>
+    <button name="Score" value=2 class="btn btn-success">Good</button>
+    <button name="Score" value=1 class="btn btn-info">Easy</button>
+    <br>
+    <p>
+        {{ query.topic}} Question # {{ query. id }}
+    </p>
+    <br>
+</form>
+{% endblock %}
