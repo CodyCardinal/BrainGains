@@ -1,10 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request
 import sqlite3
 
-
-# BUGS: errors if you get to the end of the questions
-# BUGS: if you choose a type other than HTML, it still loads question 1 ( an html question ) and you're now working through HTML questions
-
 # Initialize Flask
 app = Flask(__name__)
 
@@ -189,14 +185,12 @@ def edit(id):
         
         return render_template('edit.html', question=question)
 
-# Add a new function to update the question in the database
 def update_question(id, topic, question_text, answer):
     con = get_db_connection()
     con.execute('UPDATE questions SET topic = ?, question = ?, answer = ? WHERE id = ?', (topic, question_text, answer, id))
     con.commit()
     con.close()
 
-# Add a new function to get a question by its ID
 def get_question_by_id(id):
     con = get_db_connection()
     question = con.execute('SELECT * FROM questions WHERE id = ?', (id,)).fetchone()

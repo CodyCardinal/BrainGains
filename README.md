@@ -38,10 +38,10 @@ In the above gif, we see that the first session starts with one container of que
 - Choose that topic on the home page.
 - Proceed to read each question, mentally answer the question.
 - Once you've answered it mentally, click the question button to expand the answer.
-- If you want to try again, click Again.
-- If you answered it correctly and easily, you would click Easy.
-- If you answered it correctly, but not easily, click Good.
-- If you failed to answer it, you would click Hard.
+  - If you want to try again, click Again.
+  - If you answered it correctly and easily, you would click Easy.
+  - If you answered it correctly, but not easily, click Good.
+  - If you failed to answer it, you would click Hard.
 - Then proceed to the next question. Eventually you will be taken back to the front page once you've ehausted all questions in the topic.
 - Come back and answer questions again tomorrow. And you should then space out visits back to this topic over time. Use the Leitner System link for specific timing ( until I build in that feature! ). Over time you will notice that the questions you chose easy for will stop being offered to you.
 - Once you aren't asked any questions in that topic, you're done with that topic. It is now time for a new Topic!
