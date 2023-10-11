@@ -19,3 +19,21 @@ nav .navbar-brand .yellow {
 nav .navbar-brand .green {
     color: #2e944b;
 }
+
+#question {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: WF Visual Sans,Arial,sans-serif;
+    font-size: 4.313rem;
+    font-weight: 600;
+    line-height: 1.04;
+}
+
+#answer {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-family: WF Visual Sans,Arial,sans-serif;
+    font-size: 3.213rem;
+    font-weight: 600;
+    line-height: 1.04;
+}

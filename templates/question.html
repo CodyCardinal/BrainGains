@@ -1,34 +1,31 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block title %} {{ query.Topic }} : {{ query.id }} {% endblock %} {% block main %}
 
-{% block title %}
-{{ query.Topic }} : {{ query.id }}
-{% endblock %}
-
-{% block main %}
-
-
-
-<p>
-    click for answer -> <a class="btn btn-outline-dark btn-lrg" data-bs-toggle="collapse" href="#collapseExample"
-        role="button" aria-expanded="false" aria-controls="collapseExample">
-        {{ query.question}}
-    </a>
-</p>
-<div class="collapse" id="collapseExample">
-    <div class="card card-body">
-        {{ query.answer }}
+<div style="display: flex; flex-direction: column; justify-content: center; height: 100vh">
+  <h1
+    id="question"
+    class="btn btn-outline-dark btn-lrg btn-block"
+    style="width: 100%"
+    data-bs-toggle="collapse"
+    href="#collapseExample"
+    role="button"
+    aria-expanded="false"
+    aria-controls="collapseExample">
+    {{ query.question }}
+  </h1>
+  <div class="collapse card" id="collapseExample">
+    <div class="card-body">
+      <h2 id="answer" class="card-title">{{ query.answer }}</h2>
+      <br />
+      <form action="/answer/{{ query.Topic }}/{{ query.id }}" method="POST">
+        <button name="Score" value="3" class="btn btn-primary">Again</button>
+        <button name="Score" value="2" class="btn btn-secondary">Hard</button>
+        <button name="Score" value="1" class="btn btn-success">Good</button>
+        <button name="Score" value="0" class="btn btn-info">Easy</button>
+      </form>
     </div>
+  </div>
+  <div>
+    <p>{{ query.topic}} Question # {{ query. id }}</p>
+  </div>
 </div>
-
-<form action="/answer/{{ query.Topic }}/{{ query.id }}" method="POST">
-    <button name="Score" value=4 class="btn btn-primary">Again</button>
-    <button name="Score" value=3 class="btn btn-secondary">Hard</button>
-    <button name="Score" value=2 class="btn btn-success">Good</button>
-    <button name="Score" value=1 class="btn btn-info">Easy</button>
-    <br>
-    <p>
-        {{ query.topic}} Question # {{ query. id }}
-    </p>
-    <br>
-</form>
 {% endblock %}

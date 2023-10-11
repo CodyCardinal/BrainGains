@@ -12,7 +12,7 @@ Create
         <select class="form-control" id="Topic" name="Topic">
             <option disabled>Choose a Topic</option>
             {% for each in query %}
-            <option value="{{ each.topic }}" {% if each.topic == "ZTM-Linux" %}selected{% endif %}>{{ each.topic }}</option>
+            <option value="{{ each.topic }}" {% if each.topic == "ZTM-Linux-2" %}selected{% endif %}>{{ each.topic }}</option>
             {% endfor %}
         </select>
         {% endif %}
