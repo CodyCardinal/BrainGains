@@ -11,8 +11,8 @@ Create
         <label for="Topic" class="sr-only"> Choose Existing Topic</label>
         <select class="form-control" id="Topic" name="Topic">
             <option disabled>Choose a Topic</option>
-            {% for each in query %}
-            <option value="{{ each.topic }}" {% if each.topic == "ZTM-Linux-3" %}selected{% endif %}>{{ each.topic }}</option>
+            {% for each in query|reverse %}
+            <option value="{{ each.topic }}">{{ each.topic }}</option>
             {% endfor %}
         </select>
         {% endif %}

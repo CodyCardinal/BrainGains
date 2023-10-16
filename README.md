@@ -46,10 +46,16 @@ In the above gif, we see that the first session starts with one container of que
 - Come back and answer questions again tomorrow. And you should then space out visits back to this topic over time. Use the Leitner System link for specific timing ( until I build in that feature! ). Over time you will notice that the questions you chose easy for will stop being offered to you.
 - Once you aren't asked any questions in that topic, you're done with that topic. It is now time for a new Topic!
 
+## Newish Features and Bugfixes
+- Create Page now always defaults to the newest topic
+- now hiding the answer button until you've expanded the question
+- Fixed Scoring Bug
+- Pep8 Python Formatting Applied.
+
 ## Possible Features List
 
 - Controls for number of questions per topic asked per day
-- Setting the Default Topic on the Create Page ( A for loop in the create.html page today will set this for you for now )
+- ~~Setting the Default Topic on the Create Page~~
 - List Page updated with per-topic expanding sections
 - Markdown support for questions and answers
 - A spaced repetition scheduler based on the Leitner system
