@@ -51,12 +51,11 @@ In the above gif, we see that the first session starts with one container of que
 - now hiding the answer button until you've expanded the question
 - Fixed Scoring Bug
 - Pep8 Python Formatting Applied.
+- List Page now has expanding sections for each topic
 
 ## Possible Features List
 
 - Controls for number of questions per topic asked per day
-- ~~Setting the Default Topic on the Create Page~~
-- List Page updated with per-topic expanding sections
 - Markdown support for questions and answers
 - A spaced repetition scheduler based on the Leitner system
 - User accounts, so you can have your own set of topics and questions.
@@ -65,3 +64,5 @@ In the above gif, we see that the first session starts with one container of que
 - Way to go back a question if they are randomized
 - ~~hide the answer button until you've expanded the question~~
 - ~~MAYBE add a show answer button to the question card (denied)~~
+- ~~Setting the Default Topic on the Create Page~~
+- ~~List Page updated with per-topic expanding sections~~

@@ -166,7 +166,8 @@ def list():
         return render_template('list.html', query=query)
     else:
         query = select()
-        return render_template('list.html', query=query)
+        topics = select('Topic')
+        return render_template('list.html', query=query, topics=topics)
 
 # Edit a question
 
