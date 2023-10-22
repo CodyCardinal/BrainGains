@@ -1,0 +1,20 @@
+{% extends "layout.html" %} {% block title %} Edit Topic {% endblock %} {% block main %} 
+
+<form action="/editTopic/{{ topic }}" method="POST">
+  <div class="form-row mx-auto" style="width: 500px">
+    <div class="form-group col-md-12">
+      <label for="Topic">Topic</label>
+      <input type="text" class="form-control" id="Topic" name="Topic" value="{{ topic }}" />
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Update</button>
+</form>
+
+<br />
+<br />
+
+<form action="/deleteTopic/{{ topic }}" method="POST" color="red">
+  <button type="submit" class="btn btn-danger" value="Delete">Delete</button>
+</form>
+{% endblock %}

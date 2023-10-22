@@ -2,7 +2,6 @@ from flask import Flask, redirect, url_for, render_template, request, flash
 
 import sqlite3
 
-# Initialize Flask
 app = Flask(__name__)
 
 
@@ -44,15 +43,12 @@ def update_score(topic: str, id: int, score: int):
 
 def select(topic: str = None) -> list:
     with get_db_connection() as con:
-        # Select Distinct Topics
         if topic == 'Topic':
             topics = con.execute(
                 'SELECT DISTINCT(TOPIC) FROM QUESTIONS').fetchall()
-        # Select Specific Topic
         elif topic != None:
             topics = con.execute(
                 'SELECT * FROM QUESTIONS WHERE SESH < 4 AND TOPIC = ?', (topic,)).fetchall()
-        # Select Everything.
         else:
             topics = con.execute('SELECT * FROM QUESTIONS').fetchall()
     con.close()
@@ -88,7 +84,6 @@ def get_sesh(id: int):
     return sesh
 
 
-# App Routes
 @app.route('/', methods=('GET', 'POST'))
 def index():
     query = select('Topic')
@@ -114,11 +109,8 @@ def next(topic: str = None, id=None):
 
 @app.route('/answer/<topic>/<id>', methods=('GET', 'POST'))
 def answer(topic, id):
-    # get score as int
     score = int(request.form['Score'])
-    # Update Score
     update_score(topic, id, score)
-    # Get Next Question
     query = get_next_question(topic, id)
     if query is None:
         print('Trying to end session')
@@ -129,7 +121,6 @@ def answer(topic, id):
         return render_template('index.html')
 
     url = '/next/' + query['topic'] + '/' + str(query['id'])
-    # Redirect to next question
     return redirect(url)
 
 
@@ -169,34 +160,44 @@ def list():
         topics = select('Topic')
         return render_template('list.html', query=query, topics=topics)
 
-# Edit a question
-
 
 @app.route('/edit/<int:id>', methods=('GET', 'POST'))
 def edit(id):
     if request.method == 'POST':
-        # Update the question's data
         topic = request.form['Topic']
         question_text = request.form['Question']
         answer = request.form['Answer']
-
-        # Update the question in the database
         update_question(id, topic, question_text, answer)
-
-        # Redirect to the list of questions
         return redirect(url_for('list'))
     else:
-        # Get the question data from the database
         question = get_question_by_id(id)
 
         if question is None:
-            # Handle the case where the question with the given ID doesn't exist
             flash('Question not found', 'error')
             return redirect(url_for('list'))
 
         return render_template('edit.html', question=question)
 
-# Add a new function to update the question in the database
+
+@app.route('/editTopic/<topic>', methods=('GET', 'POST'))
+def editTopic(topic):
+    topic = topic
+    if request.method == 'POST':
+        con = get_db_connection()
+        newtopic = request.form['Topic']
+        questions = con.execute(
+            'SELECT * FROM QUESTIONS WHERE TOPIC = ?', (topic,)).fetchall()
+        try:
+            for question in questions:
+                update_question(question['id'], newtopic,
+                                question['question'], question['answer'])
+        except:
+            print('Error updating question with updated topic')
+        con.commit()
+        con.close()
+        return redirect(url_for('list'))
+    if request.method == 'GET':
+        return render_template('editTopic.html', topic=topic)
 
 
 def update_question(id, topic, question_text, answer):
@@ -205,8 +206,6 @@ def update_question(id, topic, question_text, answer):
                 (topic, question_text, answer, id))
     con.commit()
     con.close()
-
-# Add a new function to get a question by its ID
 
 
 def get_question_by_id(id):
@@ -217,6 +216,36 @@ def get_question_by_id(id):
     return question
 
 
-# Ensure it runs as main.
+def delete_question(id):
+    con = get_db_connection()
+    con.execute('DELETE FROM questions WHERE id = ?', (id,))
+    con.commit()
+    con.close()
+
+
+def deleteATopic(topic):
+    con = get_db_connection()
+    con.execute('DELETE FROM questions WHERE topic = ?', (topic,))
+    con.commit()
+    con.close()
+
+
+@app.route('/delete/<int:id>', methods=('POST',))
+def delete(id):
+    question = get_question_by_id(id)
+    if question is None:
+        flash('Question not found', 'error')
+    else:
+        delete_question(id)
+    return redirect(url_for('list'))
+
+
+@app.route('/deleteTopic/<topic>', methods=('POST',))
+def deleteTopic(topic):
+    topic = topic
+    deleteATopic(topic)
+    return redirect(url_for('list'))
+
+
 if __name__ == '__main__':
     app.run()

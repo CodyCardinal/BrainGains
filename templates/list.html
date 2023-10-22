@@ -1,51 +1,58 @@
-{% extends "layout.html" %} {% block title %} List {% endblock %} {% block main %}
-
-<div class="col-lg-12">
-  {% for topic in topics %}
-  <div class="accordion accordion-flush" id="accordionFlush{{ topic.TOPIC }}">
-    <div class="accordion-item">
-      <h2 class="accordion-header">
-        <button
-          class="accordion-button collapsed"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#{{ topic.Topic}}"
-          aria-expanded="false"
-          aria-controls="{{ topic.Topic}}">
-          {{ topic.Topic}}
-        </button>
-      </h2>
-      <div id="{{ topic.TOPIC }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlush{{ topic.TOPIC }}">
-        <div class="accordion-body">
-          <table class="table">
-            <thead>
-              <tr>
-                <th class="text-center">id</th>
-                <th class="text-center">Score</th>
-                <th class="text-center">Topic</th>
-                <th class="text-start">Question</th>
-                <th class="text-start">Answer</th>
-                <th class="text-center">Session</th>
-              </tr>
-            </thead>
-            {% for question in query if question.TOPIC == topic.TOPIC %}
-            <tbody>
-              <tr>
-                <td class="text-center">
-                  <a href="{{ url_for('edit', id=question.id) }}">{{ question.id }}</a>
-                </td>
-                <td class="text-center">{{ question.SCORE }}</td>
-                <td class="text-start">{{ question.QUESTION }}</td>
-                <td class="text-start">{{ question.ANSWER }}</td>
-                <td class="text-center">{{ question.SESH }}</td>
-              </tr>
-            </tbody>
-            {% endfor %}
-          </table>
+{% extends "layout.html" %} {% block title %} List {% endblock %} {% block main %} {% for topic in topics %}
+<div class="row">
+  <div class="col-lg-10">
+    <div class="accordion accordion-flush" id="accordionFlush{{ topic.TOPIC }}">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#{{ topic.Topic}}"
+            aria-expanded="false"
+            aria-controls="{{ topic.Topic}}">
+            {{ topic.Topic}}
+          </button>
+        </h2>
+        <div
+          id="{{ topic.TOPIC }}"
+          class="accordion-collapse collapse"
+          data-bs-parent="#accordionFlush{{ topic.TOPIC }}">
+          <div class="accordion-body">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="text-center">id</th>
+                  <th class="text-center">Score</th>
+                  <th class="text-center">Topic</th>
+                  <th class="text-start">Question</th>
+                  <th class="text-start">Answer</th>
+                  <th class="text-center">Session</th>
+                </tr>
+              </thead>
+              {% for question in query if question.TOPIC == topic.TOPIC %}
+              <tbody>
+                <tr>
+                  <td class="text-center">
+                    <a href="{{ url_for('edit', id=question.id) }}">{{ question.id }}</a>
+                  </td>
+                  <td class="text-center">{{ question.SCORE }}</td>
+                  <td class="text-start">{{ question.QUESTION }}</td>
+                  <td class="text-start">{{ question.ANSWER }}</td>
+                  <td class="text-center">{{ question.SESH }}</td>
+                </tr>
+              </tbody>
+              {% endfor %}
+            </table>
+          </div>
         </div>
       </div>
     </div>
-    {% endfor %}
+  </div>
+  <div class="col-lg-2">
+    <div class="btn">
+      <a href="{{ url_for('editTopic', topic=topic.TOPIC) }}">Edit</a>
+    </div>
   </div>
 </div>
-{% endblock %}
+{% endfor %} {% endblock %}
