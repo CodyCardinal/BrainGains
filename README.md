@@ -52,9 +52,11 @@ In the above gif, we see that the first session starts with one container of que
 - Fixed Scoring Bug
 - Pep8 Python Formatting Applied.
 - List Page now has expanding sections for each topic
+- Deleting and Editing Topics added.
 
 ## Possible Features List
 
+- Getting the hell off Flask and SQLITE3 and moving to a real database and framework.
 - Controls for number of questions per topic asked per day
 - Markdown support for questions and answers
 - A spaced repetition scheduler based on the Leitner system
