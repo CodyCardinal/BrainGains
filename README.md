@@ -66,3 +66,5 @@ In the above gif, we see that the first session starts with one container of que
 - ~~MAYBE add a show answer button to the question card (denied)~~
 - ~~Setting the Default Topic on the Create Page~~
 - ~~List Page updated with per-topic expanding sections~~
+
+  Art used with [permission](https://www.instagram.com/stephaniedyrby/).
