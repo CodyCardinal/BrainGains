@@ -2,12 +2,12 @@
 
 ![Brain Gains Art](https://github.com/CodyCardinal/BrainGains/blob/main/static/braingains.jpeg)
 
-Brain gains is my final project submission for CS50X! 
+Brain gains is my final project submission for CS50X!
 I've used Python, Flask, SQLlite, and Bootstrap Javascript.
 
 ## [Video Demo](https://www.youtube.com/watch?v=qdZy8P7B4JA)
 
-## How to start:
+## How to start
 
 - Install Python 3.10+
 - Install the requirements with `pip install -r requirements.txt`
@@ -29,7 +29,6 @@ In the above method, questions are sorted into groups according to how easily th
 
 In the above gif, we see that the first session starts with one container of questions. In the second session you're asked harder questions from the first session and the second containers questions. This process repeats until you're phased each question out into the final 5th container.
 
-
 ## Detailed How-To
 
 - While you are taking a course or lecture. You would create a new topic in Brain Gains.
@@ -47,6 +46,7 @@ In the above gif, we see that the first session starts with one container of que
 - Once you aren't asked any questions in that topic, you're done with that topic. It is now time for a new Topic!
 
 ## Newish Features and Bugfixes
+
 - Create Page now always defaults to the newest topic
 - now hiding the answer button until you've expanded the question
 - Fixed Scoring Bug

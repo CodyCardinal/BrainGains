@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, flash
+from flask import Flask, redirect, url_for, render_template, request, flash, jsonify
 
 import sqlite3
 
@@ -83,6 +83,14 @@ def get_sesh(id: int):
     con.close()
     return sesh
 
+def get_total_questions_per_topic():
+    with get_db_connection() as con:
+        if con:
+            counts = con.execute(
+                'SELECT TOPIC, COUNT(*) FROM QUESTIONS GROUP BY TOPIC;').fetchall()
+    con.close()
+    sorted_counts = {row[0]: row[1] for row in counts}
+    return sorted_counts
 
 @app.route('/', methods=('GET', 'POST'))
 def index():
@@ -158,7 +166,8 @@ def list():
     else:
         query = select()
         topics = select('Topic')
-        return render_template('list.html', query=query, topics=topics)
+        counts = get_total_questions_per_topic()
+        return render_template('list.html', query=query, topics=topics, counts=counts)
 
 
 @app.route('/edit/<int:id>', methods=('GET', 'POST'))
