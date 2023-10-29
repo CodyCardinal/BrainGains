@@ -131,9 +131,8 @@ def answer(topic, id):
     url = '/next/' + query['topic'] + '/' + str(query['id'])
     return redirect(url)
 
-
-@app.route('/createnew', methods=('GET', 'POST'))
-def createnew():
+@app.route('/create', methods=('GET', 'POST'))
+def create():
     if request.method == 'POST':
         if request.form['New']:
             topic = request.form['New']
@@ -149,13 +148,9 @@ def createnew():
             con.commit()
         con.close()
         return redirect(url_for('create'))
-    return render_template('index.html')
-
-
-@app.route('/create', methods=('GET', 'POST'))
-def create():
     query = select('Topic')
-    return render_template('create.html', query=query)
+    counts = get_total_questions_per_topic()
+    return render_template('create.html', query=query, counts=counts)
 
 
 @app.route('/list', methods=('GET', 'POST'))

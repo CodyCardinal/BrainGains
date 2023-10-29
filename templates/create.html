@@ -5,7 +5,7 @@ Create
 {% endblock %}
 
 {% block main %}
-<form class="form-inline" action="/createnew" method="POST">
+<form class="form-inline" action="/create" method="POST">
     <div class="row">
         <div class="col-md-6">
             <div class="form-group mx-sm-3 mb-2">
@@ -13,8 +13,8 @@ Create
                 <label for="Topic" class="sr-only"> Choose Existing Topic</label>
                 <select class="form-control" id="Topic" name="Topic">
                     <option disabled>Choose a Topic</option>
-                    {% for each in query|reverse %}
-                    <option value="{{ each.topic }}">{{ each.topic }}</option>
+                    {% for topic,count in counts.items()|reverse %}
+                    <option value="{{ topic }}">{{ topic }} - {{ count }} questions</option>
                     {% endfor %}
                 </select>
                 {% endif %}
