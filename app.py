@@ -198,10 +198,9 @@ def create():
         question = request.form['Question']
         answer = request.form['Answer']
         if create_new_question(topic, question, answer):
-            flash('Question created successfully!', 'success')
+            return redirect(url_for('create'))
         else:
-            flash('Error creating question', 'error')
-        return redirect(url_for('create'))
+            return "Error creating question"
     elif request.method == 'GET':
         query = select('Topic')
         counts = get_total_questions_per_topic()
