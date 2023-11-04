@@ -18,22 +18,3 @@ except Exception as e:
 finally:
     connection.commit()
     connection.close()
-
-def get_question(topic: str = None, id: int = None):
-    con = get_db_connection()
-    try:
-        if topic is None and id is not None:
-            question = con.execute(
-                'SELECT * FROM questions WHERE sesh < 4 AND id = ?', (id,)).fetchone()
-        elif topic is not None and id is None:
-            question = con.execute(
-                'SELECT * FROM questions WHERE topic = ?', (topic,)).fetchone()
-        else:
-            question = con.execute(
-                'SELECT * FROM questions WHERE id = ? AND topic = ?', (id, topic)).fetchone()
-    except Exception as e:
-        print(f"Error getting question: {e}")
-        return None
-    finally:
-        con.close()
-    return question
