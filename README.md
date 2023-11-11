@@ -46,11 +46,10 @@ In the above gif, we see that the first session starts with one container of que
 ## Newish Features and Bugfixes
 
 - Questions added to create page
-- Cleaned up create route.
+- Cleaned up create routes.
 
 ## Possible Features List/To Do
 
-- Get functions for creation out of the /create route itself.
 - move either routes or crud functions into their own library for reuse.
 - Controls for number of questions per topic asked per day
 - Markdown support for questions and answers
@@ -59,10 +58,12 @@ In the above gif, we see that the first session starts with one container of que
 - Online Hosting after converting to a production build.
 - Export Option to Anki or a Mobile App if i am really loving it.
 - Way to go back a question if they are randomized
-- list questions on the create page
+
 
 ## Completed Features List
 
+- ~~Get functions for creation out of the /create route itself.~~
+- ~~list questions on the create page~~
 - ~~hide the answer button until you've expanded the question~~
 - ~~MAYBE add a show answer button to the question card (denied)~~
 - ~~Setting the Default Topic on the Create Page~~
