@@ -2,7 +2,7 @@
 
 ![Brain Gains Art](https://github.com/CodyCardinal/BrainGains/blob/main/static/braingains.jpeg)
 
-Brain gains was originally my final project submission for CS50X! I've continued using it for all of the learning I'm doing and adding features along the way.
+BrainGains is a Flash Card App that was originally my final project submission for CS50X! I've continued using it for all of the learning I'm doing and adding features along the way.
 The original repo can be seen [here](https://github.com/CodyCardinal/CS50Final).
 
 ## [Video Demo](https://www.youtube.com/watch?v=qdZy8P7B4JA)
