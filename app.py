@@ -78,6 +78,19 @@ def select(topic: str = None) -> list:
     return topics
 
 
+def topicSelect() -> list:
+    try:
+        with get_db_connection() as con:
+            topics = con.execute(
+                'SELECT topic FROM questions GROUP BY topic ORDER BY MAX(id) DESC;').fetchall()
+            
+    except Exception as e:
+        print(f'error retrieving topics: {e}')
+        return []
+    topics = [row[0] for row in topics]
+    return topics
+
+
 def update_sesh(id: int, score: int):
     sesh = get_sesh(id)
     sesh = sesh['SESH']
@@ -87,13 +100,15 @@ def update_sesh(id: int, score: int):
             sesh += 1
             if sesh > 4:
                 sesh = 4
-            con.execute('UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
+            con.execute(
+                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
 
         if score == 2:
             sesh = sesh - 1
             if sesh < 1:
                 sesh = 1
-            con.execute('UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
+            con.execute(
+                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
 
         con.commit()
     except Exception as e:
@@ -126,6 +141,7 @@ def get_total_questions_per_topic():
             print(f"Error getting total questions per topic: {e}")
             return None
     sorted_counts = {row[0]: row[1] for row in counts}
+    print(sorted_counts)
     return sorted_counts
 
 
@@ -144,7 +160,8 @@ def create_new_question(topic, question, answer):
 def edit_topic(old_topic: str, new_topic: str):
     con = get_db_connection()
     try:
-        con.execute('UPDATE QUESTIONS SET TOPIC = ? WHERE TOPIC = ?', (new_topic, old_topic))
+        con.execute('UPDATE QUESTIONS SET TOPIC = ? WHERE TOPIC = ?',
+                    (new_topic, old_topic))
         con.commit()
     except:
         print('Error updating questions with updated topic')
@@ -202,9 +219,9 @@ def create():
         else:
             return "Error creating question"
     elif request.method == 'GET':
-        query = select('Topic')
+        topics = topicSelect()
         counts = get_total_questions_per_topic()
-        return render_template('create.html', query=query, counts=counts)
+        return render_template('create.html', topics=topics, counts=counts)
 
 
 @app.route('/list', methods=('GET', 'POST'))

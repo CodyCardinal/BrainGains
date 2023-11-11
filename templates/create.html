@@ -9,12 +9,14 @@ Create
     <div class="row">
         <div class="col-md-6">
             <div class="form-group mx-sm-3 mb-2">
-                {% if query[0] %}
+                {% if topics[0] %}
                 <label for="Topic" class="sr-only"> Choose Existing Topic</label>
                 <select class="form-control" id="Topic" name="Topic">
                     <option disabled>Choose a Topic</option>
-                    {% for topic,count in counts.items()|reverse %}
-                    <option value="{{ topic }}">{{ topic }} - {{ count }} questions</option>
+                    {% for topic in topics %}
+                        {% for each,count in counts.items() if each == topic %}
+                            <option value="{{ topic }}">{{ topic }} > {{ count }} Questions</option>
+                        {% endfor %}
                     {% endfor %}
                 </select>
                 {% endif %}
@@ -30,7 +32,7 @@ Create
     </div>
         <div class="form-group">
             <label for="Question">Question</label>
-            <input type="text" class="form-control" id="Question" name="Question">
+            <input type="text" class="form-control" id="Question" name="Question" autofocus>
         </div>
         <div class="form-group">
             <label for="Answer">Answer</label>
