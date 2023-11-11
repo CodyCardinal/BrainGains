@@ -1,4 +1,4 @@
-# BRAIN GAINS
+# BrainGains
 
 BrainGains is a local Flash Card App that was originally my final project submission for CS50X! I've continued using it for all of the learning I'm doing and adding features along the way.
 The original repo can be seen [here](https://github.com/CodyCardinal/CS50Final).
@@ -13,9 +13,9 @@ The original repo can be seen [here](https://github.com/CodyCardinal/CS50Final).
 - Run the flask app locally with `flask run`
 - Open your browser to `http://localhost:5000/`
 
-## What is Brain Gains?
+## What is BrainGains?
 
-Brain Gains is a flashcard application designed for self-assessment in your learning journey. It adheres to the fundamental principles of the [Leitner System](https://en.wikipedia.org/wiki/Leitner_system).
+BrainGains is a flashcard application designed for self-assessment in your learning journey. It adheres to the fundamental principles of the [Leitner System](https://en.wikipedia.org/wiki/Leitner_system).
 
 Typically, you would engage in a course, attend a lecture, or watch an online video. Later, either on the same day or the following day, you'd challenge yourself to recall what you've learned. This approach combines recall and spacing as integral elements of effective learning. Utilizing spacing in our learning process can enhance the retention of information. This is because our brains are more adept at retaining knowledge when it is revisited and reinforced at intervals over time. The Leitner System provides a structured method for implementing this spaced repetition technique. This concept is analogous to how muscles are exercised: they are broken down during workouts through repetitive stress repition, and then allowed time to recover and grow stronger. Similarly, our brains benefit from spaced review and reinforcement to optimize learning.
 
@@ -29,8 +29,8 @@ In the above gif, we see that the first session starts with one container of que
 
 ## Detailed How-To
 
-- While you are taking a course or lecture. You would create a new topic in Brain Gains.
-- Throughout that course, when you go to take notes, you would create a new question in Brain Gains in that topic.
+- While you are taking a course or lecture. You would create a new topic in BrainGains.
+- Throughout that course, when you go to take notes, you would create a new question in BrainGains in that topic.
 - Wait a few hours or overnight to practice recall.
 - Choose that topic on the home page.
 - Proceed to read each question, mentally answer the question.
