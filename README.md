@@ -3,16 +3,6 @@
 BrainGains is a local Flash Card App that was originally my final project submission for CS50X! I've continued using it for all of the learning I'm doing and adding features along the way.
 The original repo can be seen [here](https://github.com/CodyCardinal/CS50Final).
 
-## [Video Demo](https://www.youtube.com/watch?v=qdZy8P7B4JA)
-
-## How to start
-
-- Install Python 3.10+
-- Install the requirements with `pip install -r requirements.txt`
-- If you don't already have flashcards.db, then initialize the Database with `python init_db.py`
-- Run the flask app locally with `flask run`
-- Open your browser to `http://localhost:5000/`
-
 ## What is BrainGains?
 
 BrainGains is a flashcard application designed for self-assessment in your learning journey. It adheres to the fundamental principles of the [Leitner System](https://en.wikipedia.org/wiki/Leitner_system).
@@ -26,6 +16,16 @@ In the above method, questions are sorted into groups according to how easily th
 ![Animated gif of Leitner Learning System](https://github.com/CodyCardinal/BrainGains/blob/main/static/Leitner_system_animation.gif?raw=true)
 
 In the above gif, we see that the first session starts with one container of questions. In the second session you're asked harder questions from the first session and the second containers questions. This process repeats until you're phased each question out into the final 5th container.
+
+## [Video Demo](https://www.youtube.com/watch?v=qdZy8P7B4JA)
+
+## How to start
+
+- Install Python 3.10+
+- Install the requirements with `pip install -r requirements.txt`
+- If you don't already have flashcards.db, then initialize the Database with `python init_db.py`
+- Run the flask app locally with `flask run`
+- Open your browser to `http://localhost:5000/`
 
 ## Detailed How-To
 
