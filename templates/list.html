@@ -9,13 +9,14 @@
             class="accordion-button collapsed"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#{{ topic }}"
+            {% set safe_topic = topic|replace(" ", "_")|replace("(", "")|replace(")", "")|replace("-", "_") %}
+            data-bs-target="#{{ safe_topic }}"
             aria-expanded="false"
-            aria-controls="{{ topic }}">
+            aria-controls="{{ safe_topic }}">
             <h2>{{ topic }}</h2>
           </button>
         </div>
-        <div id="{{ topic }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlush{{ topic }}">
+        <div id="{{ safe_topic }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlush{{ safe_topic }}">
           <div class="container ms-0">
             <h4 class="row text-start col-12">{{ count }} Questions
             <a class="row text-start col-12" href="{{ url_for('editTopic', topic=topic) }}">Edit Topic</a></h4>
