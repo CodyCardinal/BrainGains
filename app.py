@@ -141,7 +141,6 @@ def get_total_questions_per_topic():
             print(f"Error getting total questions per topic: {e}")
             return None
     sorted_counts = {row[0]: row[1] for row in counts}
-    print(sorted_counts)
     return sorted_counts
 
 
