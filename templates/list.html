@@ -2,7 +2,7 @@
 %}
 <div class="row">
   <div class="col-lg-12">
-    <div class="accordion accordion-flush" {% set safe_topic = topic|replace(" ", "_")|replace("(", "")|replace(")", "")|replace(",", "") %} id="accordionFlush{{ safe_topic }}">
+    <div class="accordion accordion-flush" {% set safe_topic = topic|replace(" ", "_")|replace("(", "")|replace(")", "")|replace(",", "")|replace("/", "")|replace("\\", "") %} id="accordionFlush{{ safe_topic }}">
       <div class="accordion-item">
         <div class="accordion-header">
           <button

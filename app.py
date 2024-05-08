@@ -23,7 +23,7 @@ def get_question(topic: str = None, id: int = None):
                 'SELECT * FROM questions WHERE sesh < 4 AND id = ?', (id,)).fetchone()
         elif topic is not None and id is None:
             question = con.execute(
-                'SELECT * FROM questions WHERE topic = ?', (topic,)).fetchone()
+                'SELECT * FROM questions WHERE sesh < 4 AND topic = ?', (topic,)).fetchone()
         else:
             question = con.execute(
                 'SELECT * FROM questions WHERE id = ? AND topic = ?', (id, topic)).fetchone()
@@ -194,13 +194,11 @@ def next(topic: str = None, id=None):
 def answer(topic, id):
     score = int(request.form['Score'])
     update_score(id, score)
+    update_sesh(id, score)
     query = get_next_question(topic, id)
     if query is None:
         print('Trying to end session')
         query = select(topic)
-        for q in query:
-            print(f'Updating Sesh for {q["id"]}')
-            update_sesh(q['id'], q['score'])
         return render_template('index.html')
 
     url = '/next/' + query['topic'] + '/' + str(query['id'])
