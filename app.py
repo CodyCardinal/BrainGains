@@ -45,7 +45,7 @@ def get_next_question(topic: str, id: int):
         return None
     finally:
         con.close()
-    return question
+    return question if question else None
 
 
 def update_score(id: int, score: int):
@@ -66,7 +66,7 @@ def select(topic: str = None) -> list:
         with get_db_connection() as con:
             if topic == 'Topic':
                 topics = con.execute(
-                    'SELECT DISTINCT(TOPIC) FROM QUESTIONS').fetchall()
+                    'SELECT TOPIC FROM QUESTIONS GROUP BY TOPIC ORDER BY TOPIC ASC;').fetchall()
             elif topic is not None:
                 topics = con.execute(
                     'SELECT * FROM QUESTIONS WHERE SESH < 4 AND TOPIC = ?', (topic,)).fetchall()
@@ -197,9 +197,7 @@ def answer(topic, id):
     update_sesh(id, score)
     query = get_next_question(topic, id)
     if query is None:
-        print('Trying to end session')
-        query = select(topic)
-        return render_template('index.html')
+        return redirect(url_for('index'))
 
     url = '/next/' + query['topic'] + '/' + str(query['id'])
     return redirect(url)
@@ -251,7 +249,7 @@ def edit(id):
         return render_template('edit.html', question=question)
 
 
-@app.route('/editTopic/<topic>', methods=('GET', 'POST'))
+@app.route('/editTopic/<path:topic>', methods=('GET', 'POST'))
 def editTopic(topic):
     topic = topic
     if request.method == 'POST':
