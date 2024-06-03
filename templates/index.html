@@ -9,20 +9,20 @@ Index
     <div class="col-md-6"> 
         <img src="/static/braingains.jpeg">
     </div>
-    <div class="col-md-6">
+    <div class="col-md-6 text-start">
         {%if query %}
-        <h1 class="text-start">Choose a Topic!</h1>
+        <h1>Choose a Topic!</h1>
         {% for each in query %}
-        <form action="/question/{{ each.TOPIC }}" class="text-start" method="POST">
-                <button class="btn btn-outline-dark mb-3">{{ each.TOPIC }}</button>
-                </button>
+        <form action="/question/{{ each.TOPIC }}" method="POST">
+            <div class="btn-group-vertical" role="group">
+                <button class="btn btn-outline-dark">{{ each.TOPIC }}</button>
+            </div>
         </form>
         {% endfor %}
         {% else %}
         <form action="/create" method="GET">
             <div class="btn-group-vertical" role="group">
                 <button class="btn btn-outline-dark">Create a Topic</button>
-                </button>
             </div>
         </form>
     </div>
