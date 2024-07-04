@@ -1,9 +1,7 @@
-/* Size for brand */
 nav .navbar-brand {
     font-size: xx-large;
 }
 
-/* Colors for brand */
 nav .navbar-brand .blue {
     color: #537fbe;
 }
@@ -36,4 +34,21 @@ nav .navbar-brand .green {
     font-size: 3.213rem;
     font-weight: 600;
     line-height: 1.04;
+}
+
+body {
+    background-color: #f7f7f7 !important;
+}
+
+.cardlist {
+    background-color: #f7f7f7 !important;
+    border: 1px solid #e6e6e6;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.1);
+}
+
+.card {
+    border: 1px solid #e6e6e6;
+    border-radius: 0.25rem;
+    box-shadow: 0 0 0.5rem rgba(0,0,0,0.1);
 }

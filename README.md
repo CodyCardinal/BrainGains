@@ -58,6 +58,7 @@ In the above gif, we see that the first session starts with one container of que
 - Online Hosting after converting to a production build.
 - Export Option to Anki or a Mobile App if i am really loving it.
 - Way to go back a question if they are randomized
+- Ref/Markdown/HTML Snippet section for the questions. This way you can q&a against a reference.
 
 
 ## Completed Features List

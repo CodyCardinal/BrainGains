@@ -1,31 +1,22 @@
-{% extends "layout.html" %}
-
-{% block title %}
-Index
-{% endblock %}
-
-{% block main %}
-<div class="row">
-    <div class="col-md-6"> 
-        <img src="/static/braingains.jpeg">
+{% extends "layout.html" %} {% block title %} Index {% endblock %} {% block main %}
+<div class="col">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <img class="m-3" src="/static/braingains.jpeg" />
+      </div>
     </div>
-    <div class="col-md-6 text-start">
-        {%if query %}
-        <h1>Choose a Topic!</h1>
+      <div class="d-grid col gap-2 text-start">
+        <div class="card cardlist">
+        {% if query %}
+        <h1 class="text-center">Choose a Topic!</h1>
         {% for each in query %}
-        <form action="/question/{{ each.TOPIC }}" method="POST">
-            <div class="btn-group-vertical" role="group">
-                <button class="btn btn-outline-dark">{{ each.TOPIC }}</button>
-            </div>
-        </form>
-        {% endfor %}
-        {% else %}
-        <form action="/create" method="GET">
-            <div class="btn-group-vertical" role="group">
-                <button class="btn btn-outline-dark">Create a Topic</button>
-            </div>
-        </form>
+        <a href="/question/{{ each.TOPIC }}" class="btn btn-outline-dark btn-block mx-3 mt-2">{{ each.TOPIC }}</a>
+        {% endfor %} {% else %}
+        <a href="/create" class="btn btn-outline-dark btn-block">Create a Topic</a>
+        {% endif %}
+      </div>
     </div>
+  </div>
 </div>
-{% endif %}
 {% endblock %}

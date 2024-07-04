@@ -51,7 +51,7 @@ def get_next_question(topic: str, id: int):
 def update_score(id: int, score: int):
     try:
         con = get_db_connection()
-        con.execute('UPDATE questions SET score = ? WHERE id = ?', (score, id))
+        con.execute('UPDATE questions SET score = ? WHERE id = ?', (score.strip(), id.strip()))
         con.commit()
     except Exception as e:
         print(f"Error updating score: {e}")
@@ -101,14 +101,14 @@ def update_sesh(id: int, score: int):
             if sesh > 4:
                 sesh = 4
             con.execute(
-                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
+                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh.strip(), id.strip()))
 
         if score == 2:
             sesh = sesh - 1
             if sesh < 1:
                 sesh = 1
             con.execute(
-                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
+                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh.strip(), id.strip()))
 
         con.commit()
     except Exception as e:
@@ -148,7 +148,7 @@ def create_new_question(topic, question, answer):
     with get_db_connection() as con:
         try:
             con.execute('INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH) VALUES (?, ?, ?, ?, ?)',
-                        (1, topic, question, answer, 1))
+                        (1, topic.strip(), question.strip(), answer.strip(), 1))
             con.commit()
         except Exception as e:
             print(f"Error creating new question: {e}")
@@ -160,7 +160,7 @@ def edit_topic(old_topic: str, new_topic: str):
     con = get_db_connection()
     try:
         con.execute('UPDATE QUESTIONS SET TOPIC = ? WHERE TOPIC = ?',
-                    (new_topic, old_topic))
+                    (new_topic.strip(), old_topic.strip()))
         con.commit()
     except:
         print('Error updating questions with updated topic')
@@ -263,7 +263,7 @@ def editTopic(topic):
 def update_question(id, topic, question_text, answer):
     con = get_db_connection()
     con.execute('UPDATE questions SET topic = ?, question = ?, answer = ? WHERE id = ?',
-                (topic, question_text, answer, id))
+                (topic.strip(), question_text.strip(), answer.strip(), id.strip()))
     con.commit()
     con.close()
 
