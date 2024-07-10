@@ -147,7 +147,7 @@ def create_new_question(topic, question, answer):
     with get_db_connection() as con:
         try:
             con.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH) VALUES (?, ?, ?, ?, ?)",
-                        (1, topic, question, answer, 1))
+                        (1, topic.strip(), question.strip(), answer.strip(), 1))
             con.commit()
         except Exception as e:
             print(f"Error creating new question: {e}")
@@ -159,7 +159,7 @@ def edit_topic(old_topic: str, new_topic: str):
     con = get_db_connection()
     try:
         con.execute("UPDATE QUESTIONS SET TOPIC = ? WHERE TOPIC = ?",
-                    (new_topic, old_topic))
+                    (new_topic.strip(), old_topic.strip()))
         con.commit()
     except:
         print("Error updating questions with updated topic")
