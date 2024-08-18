@@ -128,8 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#brain gains specifics
+#braingains specifics
 .venv
 venv
 flashcards.db
-*.db
+test.py
