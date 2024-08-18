@@ -51,7 +51,7 @@ def get_next_question(topic: str, id: int):
 def update_score(id: int, score: int):
     try:
         con = get_db_connection()
-        con.execute('UPDATE questions SET score = ? WHERE id = ?', (score.strip(), id))
+        con.execute('UPDATE questions SET score = ? WHERE id = ?', (score, id))
         con.commit()
     except Exception as e:
         print(f"Error updating score: {e}")
@@ -101,14 +101,14 @@ def update_sesh(id: int, score: int):
             if sesh > 4:
                 sesh = 4
             con.execute(
-                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh.strip(), id))
+                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
 
         if score == 2:
             sesh = sesh - 1
             if sesh < 1:
                 sesh = 1
             con.execute(
-                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh.strip(), id))
+                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
 
         con.commit()
     except Exception as e:
