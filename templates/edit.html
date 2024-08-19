@@ -8,31 +8,31 @@ Edit Card
 <form action="/edit/{{ question.id }}" method="POST">
     <div class="form-row mx-auto" style="width: 500px;">
         <div class="form-group col-md-6">
-            <label for="Topic">Topic</label>
-            <input type="text" class="form-control" id="Topic" name="Topic" value="{{ question.TOPIC }}">
+            <label for="topic">Topic</label>
+            <input type="text" class="form-control" id="topic" name="topic" value="{{ question.topic }}">
         </div>
         <div class="form-group col-md-6">
-            <label for="Score">Score</label>
-            <input type="number" min="0" max="5" class="form-control" id="Score" name="Score" value="{{ question.SCORE }}">
+            <label for="score">Score</label>
+            <input type="number" min="0" max="5" class="form-control" id="score" name="score" value="{{ question.score }}">
         </div>
         <div class="form-group col-md-6">
-            <label for="Session">Session</label>
-            <input type="number" min="1" max="4" class="form-control" id="Session" name="Session" value="{{ question.SESH }}">
+            <label for="session">Session</label>
+            <input type="number" min="1" max="4" class="form-control" id="session" name="session" value="{{ question.sesh }}">
         </div>
     </div>
     <div class="form-group">
-        <label for="Question">Question</label>
-        <input type="text" class="form-control" id="Question" value="{{ question.QUESTION }}" name="Question">
+        <label for="question">Question</label>
+        <textarea class="form-control" id="question" name="question" rows="5">{{ question.question }}</textarea>
     </div>
     <div class="form-group">
-        <label for="Answer">Answer</label>
-        <input type="text" class="form-control" id="Answer" value="{{ question.ANSWER }}" name="Answer">
+        <label for="answer">Answer</label>
+        <textarea class="form-control" id="answer" name="answer" rows="5">{{ question.answer }}</textarea>
     </div>
     <button type="submit" class="btn btn-primary">Update</button>
 </form>
 <br>
 <br>
 <form action="/delete/{{ question.id }}" method="POST" color="red">
-    <button type="submit" class="btn btn-danger" value="Delete">Delete</button>
+    <button type="submit" class="btn btn-danger" value="delete">Delete</button>
 </form>
 {% endblock %}

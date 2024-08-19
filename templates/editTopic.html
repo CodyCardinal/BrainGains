@@ -3,8 +3,8 @@
 <form action="/editTopic/{{ topic }}" method="POST">
   <div class="form-row mx-auto" style="width: 500px">
     <div class="form-group col-md-12">
-      <label for="Topic">Topic</label>
-      <input type="text" class="form-control" id="Topic" name="Topic" value="{{ topic }}" />
+      <label for="topic">Topic</label>
+      <input type="text" class="form-control" id="topic" name="topic" value="{{ topic }}" />
     </div>
   </div>
 
@@ -15,6 +15,6 @@
 <br />
 
 <form action="/deleteTopic/{{ topic }}" method="POST" color="red">
-  <button type="submit" class="btn btn-danger" value="Delete">Delete</button>
+  <button type="submit" class="btn btn-danger" value="delete">Delete</button>
 </form>
 {% endblock %}

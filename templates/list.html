@@ -33,16 +33,16 @@
                   <th class="text-start">Session</th>
                 </tr>
               </thead>
-              {% for question in query if question.TOPIC == topic %}
+              {% for question in query if question.topic == topic %}
               <tbody>
                 <tr>
                   <td class="text-center">
                     <a href="{{ url_for('edit', id=question.id) }}">{{ question.id }}</a>
                   </td>
-                  <td class="text-center">{{ question.SCORE }}</td>
-                  <td class="text-start">{{ question.QUESTION }}</td>
-                  <td class="text-start">{{ question.ANSWER }}</td>
-                  <td class="text-center">{{ question.SESH }}</td>
+                  <td class="text-center">{{ question.score }}</td>
+                  <td class="text-start">{{ question.question }}</td>
+                  <td class="text-start">{{ question.answer }}</td>
+                  <td class="text-center">{{ question.sesh }}</td>
                 </tr>
               </tbody>
               {% endfor %}
