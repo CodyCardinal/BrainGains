@@ -1,6 +1,6 @@
-{% extends "layout.html" %} {% block title %} {{ query.Topic }} : {{ query.id }} {% endblock %} {% block main %}
+{% extends "layout.html" %} {% block title %} {{ query.topic }} : {{ query.id }} {% endblock %} {% block main %}
 
-<div style="display: flex; flex-direction: column; justify-content: center; height: 100vh">
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; overflow: auto;">
   <h1
     id="question"
     class="btn btn-outline-dark btn-lrg btn-block"
@@ -10,22 +10,22 @@
     role="button"
     aria-expanded="false"
     aria-controls="collapseExample">
-    {{ query.question }}
+    <div style="white-space: pre-wrap;">{{ query.question|safe }}</div>
   </h1>
   <div class="collapse card" id="collapseExample">
     <div class="card-body">
-      <h2 id="answer" class="card-title">{{ query.answer }}</h2>
+      <h2 id="answer" class="card-title"><div id="answer" class="card-title" style="white-space: pre-wrap;">{{ query.answer|safe }}</div></h2>
       <br />
-      <form action="/answer/{{ query.Topic }}/{{ query.id }}" method="POST">
-        <button name="Score" value="3" class="btn btn-primary">Again</button>
-        <button name="Score" value="2" class="btn btn-secondary">Hard</button>
-        <button name="Score" value="1" class="btn btn-success">Good</button>
-        <button name="Score" value="0" class="btn btn-info">Easy</button>
+      <form action="/answer/{{ query.topic }}/{{ query.id }}" method="POST">
+        <button name="score" value="3" class="btn btn-primary">Again</button>
+        <button name="score" value="2" class="btn btn-secondary">Hard</button>
+        <button name="score" value="1" class="btn btn-success">Good</button>
+        <button name="score" value="0" class="btn btn-info">Easy</button>
       </form>
     </div>
   </div>
   <div>
-    <p>{{ query.topic}} Question # {{ query. id }}</p>
+    <p>{{ query.topic}} Question # {{ query.id }}</p>
   </div>
 </div>
 {% endblock %}

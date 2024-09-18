@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-md-6">
       <div class="card">
-        <img class="m-3" src="/static/braingains.jpeg" />
+        <img class="m-3" src="/static/Awakening.jpeg" title="Awakening by Stephanie Dryby https://www.instagram.com/stephaniedyrby/" />
       </div>
     </div>
       <div class="d-grid col gap-2 text-start">
@@ -11,7 +11,7 @@
         {% if query %}
         <h1 class="text-center">Choose a Topic!</h1>
         {% for each in query %}
-        <a href="/question/{{ each.TOPIC }}" class="btn btn-outline-dark btn-block mx-3 mt-2">{{ each.TOPIC }}</a>
+        <a href="/question/{{ each.topic }}" class="btn btn-outline-dark btn-block mx-3 mt-2">{{ each.topic }}</a>
         {% endfor %} {% else %}
         <a href="/create" class="btn btn-outline-dark btn-block">Create a Topic</a>
         {% endif %}

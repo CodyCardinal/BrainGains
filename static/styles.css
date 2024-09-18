@@ -22,18 +22,20 @@ nav .navbar-brand .green {
     margin-top: 0;
     margin-bottom: 0;
     font-family: WF Visual Sans,Arial,sans-serif;
-    font-size: 4.313rem;
+    font-size: 2.713rem;
     font-weight: 600;
     line-height: 1.04;
+    text-align: left;
 }
 
 #answer {
     margin-top: 0;
     margin-bottom: 0;
     font-family: WF Visual Sans,Arial,sans-serif;
-    font-size: 3.213rem;
+    font-size: 2.213rem;
     font-weight: 600;
     line-height: 1.04;
+    text-align: left;
 }
 
 body {

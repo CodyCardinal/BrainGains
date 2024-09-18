@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request, flash
 
 import sqlite3
+import markdown2
 
 app = Flask(__name__)
 
@@ -64,7 +65,7 @@ def update_score(id: int, score: int):
 def select(topic: str = None) -> list:
     try:
         with get_db_connection() as con:
-            if topic == "Topic":
+            if topic == "Topic" or topic == "topic":
                 topics = con.execute("SELECT * FROM QUESTIONS GROUP BY TOPIC").fetchall()
             elif topic is not None:
                 topics = con.execute(
@@ -92,7 +93,7 @@ def topicSelect() -> list:
 
 def update_sesh(id: int, score: int):
     sesh = get_sesh(id)
-    sesh = sesh["SESH"]
+    sesh = sesh["sesh"]
     con = get_db_connection()
     try:
         if score == 0:
@@ -168,7 +169,7 @@ def edit_topic(old_topic: str, new_topic: str):
 
 @app.route("/", methods=("GET", "POST"))
 def index():
-    query = select("Topic")
+    query = select("topic")
     return render_template("index.html", query=query)
 
 
@@ -176,22 +177,30 @@ def index():
 def about():
     return render_template("about.html")
 
-
 @app.route("/question/<topic>", methods=("GET", "POST"))
 def question(topic: str = None):
-    query = get_question(topic)
-    return render_template("question.html", query=query)
-
+    query = dict(get_question(topic))
+    if query:
+        lowerCaseQuery            = {k.lower(): v for k, v in query.items()}
+        markdownQuery             = lowerCaseQuery
+        markdownQuery['question'] = markdown2.markdown(markdownQuery['question'])
+        markdownQuery['answer']   = markdown2.markdown(markdownQuery['answer'])
+    return render_template("question.html", query=markdownQuery)
 
 @app.route("/next/<topic>/<id>", methods=("GET", "POST"))
 def next(topic: str = None, id=None):
-    query = get_question(topic, id)
-    return render_template("next.html", query=query)
+    query = dict(get_question(topic, id))
+    if query:
+        lowerCaseQuery            = {k.lower(): v for k, v in query.items()}
+        markdownQuery             = lowerCaseQuery
+        markdownQuery['question'] = markdown2.markdown(markdownQuery['question'])
+        markdownQuery['answer']   = markdown2.markdown(markdownQuery['answer'])
+    return render_template("next.html", query=markdownQuery)
 
 
 @app.route("/answer/<topic>/<id>", methods=("GET", "POST"))
 def answer(topic, id):
-    score = int(request.form["Score"])
+    score = int(request.form["score"])
     update_score(id, score)
     update_sesh(id, score)
     query = get_next_question(topic, id)
@@ -205,9 +214,9 @@ def answer(topic, id):
 @app.route("/create", methods=("GET", "POST"))
 def create():
     if request.method == "POST":
-        topic = request.form.get("New") or request.form["Topic"]
-        question = request.form["Question"]
-        answer = request.form["Answer"]
+        topic = request.form.get("New") or request.form["topic"]
+        question = request.form["question"]
+        answer = request.form["answer"]
         if create_new_question(topic, question, answer):
             return redirect(url_for("create"))
         else:
@@ -217,15 +226,14 @@ def create():
         counts = get_total_questions_per_topic()
         return render_template("create.html", topics=topics, counts=counts)
 
-
 @app.route("/list", methods=("GET", "POST"))
 def list():
     if request.method == "POST":
-        query = select(request.form.get("Topic"))
+        query = select(request.form.get("topic"))
         return render_template("list.html", query=query)
     else:
         query = select()
-        topics = select("Topic")
+        topics = select("topic")
         counts = get_total_questions_per_topic()
         return render_template("list.html", query=query, topics=topics, counts=counts)
 
@@ -233,11 +241,11 @@ def list():
 @app.route("/edit/<int:id>", methods=("GET", "POST"))
 def edit(id):
     if request.method == "POST":
-        topic = request.form["Topic"]
-        question_text = request.form["Question"]
-        answer = request.form["Answer"]
-        score = request.form["Score"]
-        session = request.form["Session"]
+        topic = request.form["topic"]
+        question_text = request.form["question"]
+        answer = request.form["answer"]
+        score = request.form["score"]
+        session = request.form["session"]
         update_question(id, topic, question_text, answer, score, session)
         return redirect(url_for("list"))
     else:
@@ -254,7 +262,7 @@ def edit(id):
 def editTopic(topic):
     topic = topic
     if request.method == "POST":
-        newTopic = request.form["Topic"]
+        newTopic = request.form["topic"]
         edit_topic(topic, newTopic)
         return redirect(url_for("list"))
     if request.method == "GET":

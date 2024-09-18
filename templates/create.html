@@ -10,8 +10,8 @@ Create
         <div class="col-md-6">
             <div class="form-group mx-sm-3 mb-2">
                 {% if topics[0] %}
-                <label for="Topic" class="sr-only"> Choose Existing Topic</label>
-                <select class="form-control" id="Topic" name="Topic">
+                <label for="topic" class="sr-only"> Choose Existing Topic</label>
+                <select class="form-control" id="topic" name="topic">
                     <option disabled>Choose a Topic</option>
                     {% for topic in topics %}
                         {% for each,count in counts.items() if each == topic %}
@@ -26,23 +26,21 @@ Create
             <div class="form-group mx-sm-3 mb-2">
                 <label for="New" class="sr-only">New Topic</label>
                 <input type="text" class="form-control" id="New" name="New">
-                </select>
             </div>
         </div>
     </div>
-        <div class="form-group">
-            <label for="Question">Question</label>
-            <input type="text" class="form-control" id="Question" name="Question" autofocus>
-        </div>
-        <div class="form-group">
-            <label for="Answer">Answer</label>
-            <input type="text" class="form-control" id="Answer" name="Answer">
-        </div>
-        <p>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary mb-2" value="Submit">SUBMIT</button>
-        </div>
-        </p>
+    <div class="form-group">
+        <label for="question">Question</label>
+        <textarea class="form-control" id="question" name="question" rows="5" autofocus></textarea>
+    </div>
+    <div class="form-group">
+        <label for="answer">Answer</label>
+        <textarea class="form-control" id="answer" name="answer" rows="5"></textarea>
+    </div>
+    <p>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary mb-2" value="Submit">SUBMIT</button>
+    </div>
+    </p>
 </form>
 {% endblock %}
-
