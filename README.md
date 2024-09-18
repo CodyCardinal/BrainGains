@@ -1,7 +1,8 @@
 # BrainGains
 
 BrainGains is a local Flash Card App that was originally my final project submission for CS50X! I've continued using it for all of the learning I'm doing and adding features along the way.
-The original repo can be seen [here](https://github.com/CodyCardinal/CS50Final).
+
+![Awakening](https://github.com/CodyCardinal/BrainGains/blob/main/static/Awakening.jpeg)
 
 ## What is BrainGains?
 
@@ -73,4 +74,4 @@ In the above gif, we see that the first session starts with one container of que
 - ~~Pep8 Python Formatting Applied.~~
 - ~~Deleting and Editing Topics added.~~
 
-  Art used with [permission](https://www.instagram.com/stephaniedyrby/).
+  "Awakening" is used with permission from the artist [Stephanie Dryby](https://www.instagram.com/stephaniedyrby/).
