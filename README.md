@@ -74,4 +74,4 @@ In the above gif, we see that the first session starts with one container of que
 - ~~Pep8 Python Formatting Applied.~~
 - ~~Deleting and Editing Topics added.~~
 
-  "Awakening" is used with permission from the artist [Stephanie Dryby](https://www.instagram.com/stephaniedyrby/).
+"Awakening" is used with permission from the artist [Stephanie Dryby](https://www.instagram.com/stephaniedyrby/).
