@@ -66,7 +66,8 @@ def select(topic: str = None) -> list:
     try:
         with get_db_connection() as con:
             if topic == "Topic" or topic == "topic":
-                topics = con.execute("SELECT * FROM QUESTIONS GROUP BY TOPIC").fetchall()
+                topics = con.execute(
+                    "SELECT * FROM QUESTIONS GROUP BY TOPIC").fetchall()
             elif topic is not None:
                 topics = con.execute(
                     "SELECT * FROM QUESTIONS WHERE SESH < 4 AND TOPIC = ?", (topic,)).fetchall()
@@ -83,7 +84,7 @@ def topicSelect() -> list:
         with get_db_connection() as con:
             topics = con.execute(
                 "SELECT topic FROM questions GROUP BY topic ORDER BY MAX(id) DESC;").fetchall()
-            
+
     except Exception as e:
         print(f"error retrieving topics: {e}")
         return []
@@ -132,6 +133,26 @@ def get_sesh(id: int):
     return sesh
 
 
+def get_topics_by_section():
+    with get_db_connection() as con:
+        try:
+            sections = con.execute(
+                "SELECT SECTION, GROUP_CONCAT(DISTINCT TOPIC) as TOPICS FROM QUESTIONS GROUP BY SECTION;").fetchall()
+        except Exception as e:
+            print(f"Error getting topics by section: {e}")
+            return None
+    topics_by_section = {row['SECTION']: row['TOPICS'].split(',') for row in sections}
+    return topics_by_section
+
+
+def get_section_by_topic(topic: str):
+    con = get_db_connection()
+    section = con.execute(
+        "SELECT SECTION FROM QUESTIONS WHERE TOPIC = ? LIMIT 1", (topic.strip(),)).fetchone()
+    con.close()
+    return section['SECTION'] if section else ''
+
+
 def get_total_questions_per_topic():
     with get_db_connection() as con:
         try:
@@ -144,11 +165,11 @@ def get_total_questions_per_topic():
     return sorted_counts
 
 
-def create_new_question(topic, question, answer):
+def create_new_question(topic, question, answer, section):
     with get_db_connection() as con:
         try:
-            con.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH) VALUES (?, ?, ?, ?, ?)",
-                        (1, topic.strip(), question.strip(), answer.strip(), 1))
+            con.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH, SECTION) VALUES (?, ?, ?, ?, ?, ?)",
+                        (1, topic.strip(), question.strip(), answer.strip(), 1, section.strip()))
             con.commit()
         except Exception as e:
             print(f"Error creating new question: {e}")
@@ -167,34 +188,50 @@ def edit_topic(old_topic: str, new_topic: str):
     con.close()
 
 
+def edit_section(topic: str, section: str):
+    con = get_db_connection()
+    try:
+        con.execute("UPDATE QUESTIONS SET SECTION = ? WHERE TOPIC = ?",
+                    (section.strip(), topic.strip()))
+        con.commit()
+    except:
+        print("Error updating questions with updated section")
+    con.close()
+
+
 @app.route("/", methods=("GET", "POST"))
 def index():
-    query = select("topic")
-    return render_template("index.html", query=query)
+    topics_by_section = get_topics_by_section()
+    counts = get_total_questions_per_topic()
+    return render_template("index.html", topics_by_section=topics_by_section, counts=counts)
 
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
+
 @app.route("/question/<topic>", methods=("GET", "POST"))
 def question(topic: str = None):
     query = dict(get_question(topic))
     if query:
-        lowerCaseQuery            = {k.lower(): v for k, v in query.items()}
-        markdownQuery             = lowerCaseQuery
-        markdownQuery['question'] = markdown2.markdown(markdownQuery['question'])
-        markdownQuery['answer']   = markdown2.markdown(markdownQuery['answer'])
+        lowerCaseQuery = {k.lower(): v for k, v in query.items()}
+        markdownQuery = lowerCaseQuery
+        markdownQuery['question'] = markdown2.markdown(
+            markdownQuery['question'])
+        markdownQuery['answer'] = markdown2.markdown(markdownQuery['answer'])
     return render_template("question.html", query=markdownQuery)
+
 
 @app.route("/next/<topic>/<id>", methods=("GET", "POST"))
 def next(topic: str = None, id=None):
     query = dict(get_question(topic, id))
     if query:
-        lowerCaseQuery            = {k.lower(): v for k, v in query.items()}
-        markdownQuery             = lowerCaseQuery
-        markdownQuery['question'] = markdown2.markdown(markdownQuery['question'])
-        markdownQuery['answer']   = markdown2.markdown(markdownQuery['answer'])
+        lowerCaseQuery = {k.lower(): v for k, v in query.items()}
+        markdownQuery = lowerCaseQuery
+        markdownQuery['question'] = markdown2.markdown(
+            markdownQuery['question'])
+        markdownQuery['answer'] = markdown2.markdown(markdownQuery['answer'])
     return render_template("next.html", query=markdownQuery)
 
 
@@ -217,14 +254,16 @@ def create():
         topic = request.form.get("New") or request.form["topic"]
         question = request.form["question"]
         answer = request.form["answer"]
-        if create_new_question(topic, question, answer):
+        section = request.form.get("section", "default")
+        if create_new_question(topic, question, answer, section):
             return redirect(url_for("create"))
         else:
             return "Error creating question"
     elif request.method == "GET":
-        topics = topicSelect()
+        topics_by_section = get_topics_by_section()
         counts = get_total_questions_per_topic()
-        return render_template("create.html", topics=topics, counts=counts)
+        return render_template("create.html", topics_by_section=topics_by_section, counts=counts)
+
 
 @app.route("/list", methods=("GET", "POST"))
 def list():
@@ -233,9 +272,9 @@ def list():
         return render_template("list.html", query=query)
     else:
         query = select()
-        topics = select("topic")
+        topics_by_section = get_topics_by_section()
         counts = get_total_questions_per_topic()
-        return render_template("list.html", query=query, topics=topics, counts=counts)
+        return render_template("list.html", query=query, topics_by_section=topics_by_section, counts=counts)
 
 
 @app.route("/edit/<int:id>", methods=("GET", "POST"))
@@ -260,13 +299,15 @@ def edit(id):
 
 @app.route("/editTopic/<path:topic>", methods=("GET", "POST"))
 def editTopic(topic):
-    topic = topic
     if request.method == "POST":
+        newSection = request.form["section"]
         newTopic = request.form["topic"]
         edit_topic(topic, newTopic)
+        edit_section(newTopic, newSection)
         return redirect(url_for("list"))
     if request.method == "GET":
-        return render_template("editTopic.html", topic=topic)
+        section = get_section_by_topic(topic)
+        return render_template("editTopic.html", topic=topic, section=section)
 
 
 def update_question(id, topic, question_text, answer, score, session):

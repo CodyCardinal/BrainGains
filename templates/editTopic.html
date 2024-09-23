@@ -3,6 +3,8 @@
 <form action="/editTopic/{{ topic }}" method="POST">
   <div class="form-row mx-auto" style="width: 500px">
     <div class="form-group col-md-12">
+      <label for="section">Section</label>
+      <input type="text" class="form-control" id="section" name="section" value="{{ section }}" />
       <label for="topic">Topic</label>
       <input type="text" class="form-control" id="topic" name="topic" value="{{ topic }}" />
     </div>

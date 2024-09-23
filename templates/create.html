@@ -7,25 +7,43 @@ Create
 {% block main %}
 <form class="form-inline" action="/create" method="POST">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="form-group mx-sm-3 mb-2">
-                {% if topics[0] %}
-                <label for="topic" class="sr-only"> Choose Existing Topic</label>
+                {% if topics_by_section %}
+                <label for="topic" class="sr-only">Existing Section and Topic</label>
                 <select class="form-control" id="topic" name="topic">
-                    <option disabled>Choose a Topic</option>
-                    {% for topic in topics %}
-                        {% for each,count in counts.items() if each == topic %}
-                            <option value="{{ topic }}">{{ topic }} > {{ count }} Questions</option>
+                    <option disabled selected>Choose</option>
+                    {% for section, topics in topics_by_section.items() %}
+                        {% for topic in topics %}
+                            <option value="{{ topic }}">{{ section }} > {{ topic }} > {{ counts[topic] }} Questions</option>
                         {% endfor %}
                     {% endfor %}
                 </select>
                 {% endif %}
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
             <div class="form-group mx-sm-3 mb-2">
                 <label for="New" class="sr-only">New Topic</label>
-                <input type="text" class="form-control" id="New" name="New">
+                <input type="text" class="form-control" id="New" name="New" placeholder="New Topic">
+            </div>
+        </div>
+    </div>
+    <div class="row mt-2">
+        <div class="text-align-center">
+            <h4>OR</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-5 mt-4">
+            <p>Markdown now enabled! <a href="https://www.markdownguide.org/basic-syntax/">Docs</a>.</p>
+        </div>
+        <div class="col-md-2"></div>
+         <div class="col-md-5">
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="section" class="sr-only">New Section</label>
+                <input type="text" class="form-control" id="section" name="section" placeholder="default">
             </div>
         </div>
     </div>

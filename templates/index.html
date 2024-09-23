@@ -1,4 +1,6 @@
-{% extends "layout.html" %} {% block title %} Index {% endblock %} {% block main %}
+{% extends "layout.html" %} 
+{% block title %} Index {% endblock %} 
+{% block main %}
 <div class="col">
   <div class="row">
     <div class="col-md-6">
@@ -6,13 +8,25 @@
         <img class="m-3" src="/static/Awakening.jpeg" title="Awakening by Stephanie Dryby https://www.instagram.com/stephaniedyrby/" />
       </div>
     </div>
-      <div class="d-grid col gap-2 text-start">
-        <div class="card cardlist">
-        {% if query %}
+    <div class="d-grid col text-start">
+      <div class="card cardlist">
+        {% if topics_by_section %}
         <h1 class="text-center">Choose a Topic!</h1>
-        {% for each in query %}
-        <a href="/question/{{ each.topic }}" class="btn btn-outline-dark btn-block mx-3 mt-2">{{ each.topic }}</a>
-        {% endfor %} {% else %}
+        {% for section, topics in topics_by_section.items() %}
+        <div class="row ms-2">
+          <div class="col-lg-12">
+            <h3 class="section-header">{{ section }}</h3>
+            <div class="row">
+              {% for topic in topics %}
+              <div class="col-md-8">
+                <a href="/question/{{ topic }}" class="btn btn-outline-dark btn-block topic-header">{{ topic }}</a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
         <a href="/create" class="btn btn-outline-dark btn-block">Create a Topic</a>
         {% endif %}
       </div>

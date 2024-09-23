@@ -133,3 +133,4 @@ dmypy.json
 venv
 flashcards.db
 test.py
+.ipynb
