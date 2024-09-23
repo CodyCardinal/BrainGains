@@ -46,24 +46,24 @@ In the above gif, we see that the first session starts with one container of que
 
 ## Newish Features and Bugfixes
 
-- Questions added to create page
-- Cleaned up create routes.
+- Sections and Markdown support added.
 
 ## Possible Features List/To Do
 
 - move either routes or crud functions into their own library for reuse.
 - Controls for number of questions per topic asked per day
-- Markdown support for questions and answers
 - A spaced repetition scheduler based on the Leitner system
 - User accounts, so you can have your own set of topics and questions.
 - Online Hosting after converting to a production build.
 - Export Option to Anki or a Mobile App if i am really loving it.
 - Way to go back a question if they are randomized
-- Ref/Markdown/HTML Snippet section for the questions. This way you can q&a against a reference.
 
 
 ## Completed Features List
 
+- ~~Sections for topics. So the hierarchy is sections>topics>questions.~~
+- ~~Markdown support for questions and answers~~
+- ~~Ref/Markdown/HTML Snippet section for the questions. This way you can q&a against a reference.~~
 - ~~Get functions for creation out of the /create route itself.~~
 - ~~list questions on the create page~~
 - ~~hide the answer button until you've expanded the question~~
