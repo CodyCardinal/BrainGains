@@ -47,20 +47,20 @@ In the above gif, we see that the first session starts with one container of que
 ## Newish Features and Bugfixes
 
 - Sections and Markdown support added.
+- Code refactor, moved functions and routes into their own file. implementing blueprints.
 
 ## Possible Features List/To Do
 
-- move either routes or crud functions into their own library for reuse.
 - Controls for number of questions per topic asked per day
 - A spaced repetition scheduler based on the Leitner system
 - User accounts, so you can have your own set of topics and questions.
 - Online Hosting after converting to a production build.
-- Export Option to Anki or a Mobile App if i am really loving it.
-- Way to go back a question if they are randomized
-
+- Export Option to Anki or a Mobile App.
+- Way to go back a question if they are randomized.
 
 ## Completed Features List
 
+- ~~move either routes or crud functions into their own library for reuse.~~
 - ~~Sections for topics. So the hierarchy is sections>topics>questions.~~
 - ~~Markdown support for questions and answers~~
 - ~~Ref/Markdown/HTML Snippet section for the questions. This way you can q&a against a reference.~~
