@@ -22,7 +22,7 @@
         <div id="topic_{{ safe_topic }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlush_topic_{{ safe_topic }}">
           <div class="container ms-0">
             <h4 class="row text-start col-12">{{ counts[topic] }} Questions
-            <a class="row text-start col-12" href="{{ url_for('editTopic', topic=topic) }}">Edit Topic</a></h4>
+            <a class="row text-start col-12" href="{{ url_for('app.editTopic', topic=topic) }}">Edit Topic</a></h4>
           </div>
           <div class="accordion-body">
             <table class="table">
@@ -39,7 +39,7 @@
               {% for question in query if question.topic == topic %}
                 <tr>
                   <td class="text-center">
-                    <a href="{{ url_for('edit', id=question.id) }}">{{ question.id }}</a>
+                    <a href="{{ url_for('app.edit', id=question.id) }}">{{ question.id }}</a>
                   </td>
                   <td class="text-center">{{ question.score }}</td>
                   <td class="text-start">{{ question.question }}</td>
