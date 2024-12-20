@@ -12,10 +12,10 @@ Create
                 {% if topics_by_section %}
                 <label for="topic" class="sr-only">Existing Section and Topic</label>
                 <select class="form-control" id="topic" name="topic">
-                    <option disabled selected>Choose</option>
+                    <option disabled>Choose</option>
                     {% for section, topics in topics_by_section.items() %}
                         {% for topic in topics %}
-                            <option value="{{ topic }}">{{ section }} > {{ topic }} > {{ counts[topic] }} Questions</option>
+                            <option value="{{ topic }}" {% if topic == latest_topic %}selected{% endif %}>{{ section }} > {{ topic }} > {{ counts[topic] }} Questions</option>
                         {% endfor %}
                     {% endfor %}
                 </select>
@@ -25,8 +25,8 @@ Create
         <div class="col-md-2"></div>
         <div class="col-md-5">
             <div class="form-group mx-sm-3 mb-2">
-                <label for="New" class="sr-only">New Topic</label>
-                <input type="text" class="form-control" id="New" name="New" placeholder="New Topic">
+                <label for="section" class="sr-only">New Section</label>
+                <input type="text" class="form-control" id="section" name="section" placeholder="default" value="{{ latest_section }}">
             </div>
         </div>
     </div>
@@ -40,10 +40,10 @@ Create
             <p>Markdown now enabled! <a href="https://www.markdownguide.org/basic-syntax/">Docs</a>.</p>
         </div>
         <div class="col-md-2"></div>
-         <div class="col-md-5">
+        <div class="col-md-5">
             <div class="form-group mx-sm-3 mb-2">
-                <label for="section" class="sr-only">New Section</label>
-                <input type="text" class="form-control" id="section" name="section" placeholder="default">
+                <label for="New" class="sr-only">New Topic</label>
+                <input type="text" class="form-control" id="New" name="New" placeholder="New Topic">
             </div>
         </div>
     </div>

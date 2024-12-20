@@ -193,12 +193,12 @@ def edit_section(topic: str, section: str):
     con.close()
 
 
-def update_question(id, topic, question_text, answer, score, session):
+def update_question(id, topic, question_text, answer, score, session, section):
     con = get_db_connection()
     if int(session) > 4:
         session = 4
-    con.execute("UPDATE questions SET topic = ?, question = ?, answer = ?, score = ?, sesh = ? WHERE id = ?",
-                (topic, question_text, answer, score, session, id))
+    con.execute("UPDATE questions SET topic = ?, question = ?, answer = ?, score = ?, sesh = ?, section = ? WHERE id = ?",
+                (topic, question_text, answer, score, session, section, id))
     con.commit()
     con.close()
 

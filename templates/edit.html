@@ -8,6 +8,10 @@ Edit Card
 <form action="/edit/{{ question.id }}" method="POST">
     <div class="form-row mx-auto" style="width: 500px;">
         <div class="form-group col-md-6">
+            <label for="section">Section</label>
+            <input type="text" class="form-control" id="section" name="section" value="{{ question.section }}">
+        </div>        
+        <div class="form-group col-md-6">
             <label for="topic">Topic</label>
             <input type="text" class="form-control" id="topic" name="topic" value="{{ question.topic }}">
         </div>

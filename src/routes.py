@@ -68,8 +68,10 @@ def create():
     elif request.method == "GET":
         topics_by_section = get_topics_by_section()
         counts = get_total_questions_per_topic()
-        return render_template("create.html", topics_by_section=topics_by_section, counts=counts)
-
+        latest_question = select()[-1]  # Get the latest question
+        latest_topic = latest_question['TOPIC']
+        latest_section = latest_question['SECTION']
+        return render_template("create.html", topics_by_section=topics_by_section, counts=counts, latest_topic=latest_topic, latest_section=latest_section)
 
 @app.route("/list", methods=("GET", "POST"))
 def list():
@@ -91,7 +93,8 @@ def edit(id):
         answer = request.form["answer"]
         score = request.form["score"]
         session = request.form["session"]
-        update_question(id, topic, question_text, answer, score, session)
+        section = request.form["section"]
+        update_question(id, topic, question_text, answer, score, session, section)
         return redirect(url_for("app.list"))
     else:
         question = get_question_by_id(id)
