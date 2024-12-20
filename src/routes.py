@@ -58,11 +58,8 @@ def answer(topic, id):
 def create():
     if request.method == "POST":
         existing_section_and_topic = request.form.get("existingsectionandtopic")
-        print(existing_section_and_topic)
         new_section = request.form.get("newsection")
-        print(new_section)
         new_topic = request.form.get("newtopic")
-        print(new_topic)
         question = request.form["question"]
         answer = request.form["answer"]
 
@@ -84,7 +81,6 @@ def create():
         topics_by_section = get_topics_by_section()
         counts = get_total_questions_per_topic()
         latest_question = select()[-1]
-        print(dict(latest_question))
         latest_topic = latest_question['TOPIC']
         latest_section = latest_question['SECTION']
         return render_template("create.html", topics_by_section=topics_by_section, counts=counts, latest_topic=latest_topic, latest_section=latest_section)
@@ -118,7 +114,6 @@ def edit(id):
         if question is None:
             flash("Question not found", "error")
             return redirect(url_for("app.list"))
-        print(dict(question))
         return render_template("edit.html", question=question)
 
 
