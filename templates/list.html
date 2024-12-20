@@ -5,23 +5,25 @@
 <div class="row">
   <div class="col-lg-12">
     <h3>{{ section }}</h3>
-    {% for topic in topics %}
-    <div class="accordion accordion-flush" {% set safe_topic = topic|replace(" ", "_")|replace("(", "")|replace(")", "")|replace(",", "")|replace("/", "")|replace("\\", "")|replace("&", "and") %} id="accordionFlush_topic_{{ safe_topic }}">
+    {% for topic_info in topics %}
+    {% set topic = topic_info.topic %}
+    {% set count = topic_info.count %}
+    <div class="accordion accordion-flush" {% set safe_topic = topic|replace(" ", "_")|replace("(", "")|replace(")", "")|replace(",", "")|replace("/", "")|replace("\\", "")|replace("&", "and") %} id="accordionFlush_topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
       <div class="accordion-item">
         <div class="accordion-header">
           <button
             class="accordion-button collapsed"
             type="button"
             data-bs-toggle="collapse"
-            data-bs-target="#topic_{{ safe_topic }}"
+            data-bs-target="#topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}"
             aria-expanded="false"
-            aria-controls="topic_{{ safe_topic }}">
+            aria-controls="topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
             <h2>{{ topic }}</h2>
           </button>
         </div>
-        <div id="topic_{{ safe_topic }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlush_topic_{{ safe_topic }}">
+        <div id="topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlush_topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
           <div class="container ms-0">
-            <h4 class="row text-start col-12">{{ counts[topic] }} Questions
+            <h4 class="row text-start col-12">{{ count }} Questions
             <a class="row text-start col-12" href="{{ url_for('app.editTopic', topic=topic) }}">Edit Topic</a></h4>
           </div>
           <div class="accordion-body">
@@ -36,7 +38,7 @@
                 </tr>
               </thead>
               <tbody>
-              {% for question in query if question.topic == topic %}
+              {% for question in query if question.topic == topic and question.section == section %}
                 <tr>
                   <td class="text-center">
                     <a href="{{ url_for('app.edit', id=question.id) }}">{{ question.id }}</a>

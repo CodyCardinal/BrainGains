@@ -130,12 +130,18 @@ def get_topics_by_section():
     with get_db_connection() as con:
         try:
             sections = con.execute(
-                "SELECT SECTION, GROUP_CONCAT(DISTINCT TOPIC) as TOPICS FROM QUESTIONS GROUP BY SECTION;").fetchall()
+                "SELECT SECTION, TOPIC, COUNT(*) as COUNT FROM QUESTIONS GROUP BY SECTION, TOPIC;").fetchall()
         except Exception as e:
             print(f"Error getting topics by section: {e}")
             return None
-    topics_by_section = {row['SECTION']
-        : row['TOPICS'].split(',') for row in sections}
+    topics_by_section = {}
+    for row in sections:
+        section = row['SECTION']
+        topic = row['TOPIC']
+        count = row['COUNT']
+        if section not in topics_by_section:
+            topics_by_section[section] = []
+        topics_by_section[section].append({'topic': topic, 'count': count})
     return topics_by_section
 
 

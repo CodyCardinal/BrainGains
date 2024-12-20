@@ -10,12 +10,13 @@ Create
         <div class="col-md-5">
             <div class="form-group mx-sm-3 mb-2">
                 {% if topics_by_section %}
-                <label for="topic" class="sr-only">Existing Section and Topic</label>
-                <select class="form-control" id="topic" name="topic">
+                <label for="existingsectionandtopic" class="sr-only">Existing Section and Topic</label>
+                <select class="form-control" id="existingsectionandtopic" name="existingsectionandtopic">
                     <option disabled>Choose</option>
                     {% for section, topics in topics_by_section.items() %}
-                        {% for topic in topics %}
-                            <option value="{{ topic }}" {% if topic == latest_topic %}selected{% endif %}>{{ section }} > {{ topic }} > {{ counts[topic] }} Questions</option>
+                        {% for topic_info in topics %}
+                            {% set topic = topic_info.topic %}
+                            <option value="{{ section }} > {{ topic }}"{% if section == latest_section and topic == latest_topic %}selected{% endif %}>{{ section }} > {{ topic }} > {{ counts[topic] }} Questions</option>
                         {% endfor %}
                     {% endfor %}
                 </select>
@@ -25,8 +26,8 @@ Create
         <div class="col-md-2"></div>
         <div class="col-md-5">
             <div class="form-group mx-sm-3 mb-2">
-                <label for="section" class="sr-only">New Section</label>
-                <input type="text" class="form-control" id="section" name="section" placeholder="default" value="{{ latest_section }}">
+                <label for="newsection" class="sr-only">New Section</label>
+                <input type="text" class="form-control" id="newsection" name="newsection" placeholder="default">
             </div>
         </div>
     </div>
@@ -42,8 +43,8 @@ Create
         <div class="col-md-2"></div>
         <div class="col-md-5">
             <div class="form-group mx-sm-3 mb-2">
-                <label for="New" class="sr-only">New Topic</label>
-                <input type="text" class="form-control" id="New" name="New" placeholder="New Topic">
+                <label for="newtopic" class="sr-only">New Topic</label>
+                <input type="text" class="form-control" id="newtopic" name="newtopic" placeholder="New Topic">
             </div>
         </div>
     </div>

@@ -57,10 +57,25 @@ def answer(topic, id):
 @app.route("/create", methods=("GET", "POST"))
 def create():
     if request.method == "POST":
-        topic = request.form.get("New") or request.form["topic"]
+        existing_section_and_topic = request.form.get("existingsectionandtopic")
+        print(existing_section_and_topic)
+        new_section = request.form.get("newsection")
+        print(new_section)
+        new_topic = request.form.get("newtopic")
+        print(new_topic)
         question = request.form["question"]
         answer = request.form["answer"]
-        section = request.form.get("section", "default")
+
+        if new_section:
+            section = new_section
+        else:
+            section = existing_section_and_topic.split(" > ")[0]
+
+        if new_topic:
+            topic = new_topic
+        else:
+            topic = existing_section_and_topic.split(" > ")[1]
+
         if create_new_question(topic, question, answer, section):
             return redirect(url_for("app.create"))
         else:
@@ -68,10 +83,12 @@ def create():
     elif request.method == "GET":
         topics_by_section = get_topics_by_section()
         counts = get_total_questions_per_topic()
-        latest_question = select()[-1]  # Get the latest question
+        latest_question = select()[-1]
+        print(dict(latest_question))
         latest_topic = latest_question['TOPIC']
         latest_section = latest_question['SECTION']
         return render_template("create.html", topics_by_section=topics_by_section, counts=counts, latest_topic=latest_topic, latest_section=latest_section)
+
 
 @app.route("/list", methods=("GET", "POST"))
 def list():
@@ -81,8 +98,7 @@ def list():
     else:
         query = select()
         topics_by_section = get_topics_by_section()
-        counts = get_total_questions_per_topic()
-        return render_template("list.html", query=query, topics_by_section=topics_by_section, counts=counts)
+        return render_template("list.html", query=query, topics_by_section=topics_by_section)
 
 
 @app.route("/edit/<int:id>", methods=("GET", "POST"))
@@ -102,7 +118,7 @@ def edit(id):
         if question is None:
             flash("Question not found", "error")
             return redirect(url_for("app.list"))
-
+        print(dict(question))
         return render_template("edit.html", question=question)
 
 
