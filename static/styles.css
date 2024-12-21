@@ -72,3 +72,8 @@ body {
     margin-top: 0.1rem;
     margin-bottom: 0.1rem;
 }
+
+pre code {
+    white-space: pre-wrap;
+    word-break: break-word;
+}

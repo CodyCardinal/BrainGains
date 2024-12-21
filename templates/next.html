@@ -1,20 +1,20 @@
 {% extends "layout.html" %} {% block title %} {{ query.topic }} : {{ query.id }} {% endblock %} {% block main %}
 
-<div style="display: flex; flex-direction: column; justify-content: center; height: 100vh">
-  <h1
+<div style="display: flex; flex-direction: column; justify-content: center; height: 75vh">
+  <h2
     id="question"
-    class="btn btn-outline-dark btn-lrg btn-block"
+    class="btn btn-outline-dark btn-lg btn-block"
     style="width: 100%"
     data-bs-toggle="collapse"
     href="#collapseExample"
     role="button"
     aria-expanded="false"
     aria-controls="collapseExample">
-    {{ query.question|safe }}
-  </h1>
+    <div style="white-space: pre-wrap">{{ query.question|safe }}</div>
+  </h2>
   <div class="collapse card" id="collapseExample">
     <div class="card-body">
-      <h2 id="answer" class="card-title">{{ query.answer|safe }}</h2>
+      <h2 id="answer" class="card-title" style="white-space: pre-wrap">{{ query.answer|safe }}</h2>
       <br />
       <form action="/answer/{{ query.topic }}/{{ query.id }}" method="POST">
         <button name="score" value="3" class="btn btn-primary">Again</button>

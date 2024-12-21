@@ -24,8 +24,9 @@ def question(topic: str = None):
         lowerCaseQuery = {k.lower(): v for k, v in query.items()}
         markdownQuery = lowerCaseQuery
         markdownQuery['question'] = markdown2.markdown(
-            markdownQuery['question'])
-        markdownQuery['answer'] = markdown2.markdown(markdownQuery['answer'])
+            markdownQuery['question'], extras=["fenced-code-blocks"])
+        markdownQuery['answer'] = markdown2.markdown(
+            markdownQuery['answer'], extras=["fenced-code-blocks"])
     return render_template("question.html", query=markdownQuery)
 
 
@@ -36,8 +37,9 @@ def next(topic: str = None, id=None):
         lowerCaseQuery = {k.lower(): v for k, v in query.items()}
         markdownQuery = lowerCaseQuery
         markdownQuery['question'] = markdown2.markdown(
-            markdownQuery['question'])
-        markdownQuery['answer'] = markdown2.markdown(markdownQuery['answer'])
+            markdownQuery['question'], extras=["fenced-code-blocks"])
+        markdownQuery['answer'] = markdown2.markdown(
+            markdownQuery['answer'], extras=["fenced-code-blocks"])
     return render_template("next.html", query=markdownQuery)
 
 
@@ -57,7 +59,8 @@ def answer(topic, id):
 @app.route("/create", methods=("GET", "POST"))
 def create():
     if request.method == "POST":
-        existing_section_and_topic = request.form.get("existingsectionandtopic")
+        existing_section_and_topic = request.form.get(
+            "existingsectionandtopic")
         new_section = request.form.get("newsection")
         new_topic = request.form.get("newtopic")
         question = request.form["question"]
@@ -106,7 +109,8 @@ def edit(id):
         score = request.form["score"]
         session = request.form["session"]
         section = request.form["section"]
-        update_question(id, topic, question_text, answer, score, session, section)
+        update_question(id, topic, question_text,
+                        answer, score, session, section)
         return redirect(url_for("app.list"))
     else:
         question = get_question_by_id(id)
