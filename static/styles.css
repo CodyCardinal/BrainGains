@@ -18,24 +18,51 @@ nav .navbar-brand .green {
     color: #2e944b;
 }
 
+#question-text {
+    margin-bottom: 20px;
+}
+
+#question-box {
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    height         : 75vh;
+    margin-top     : 20px;
+}
+
 #question {
-    margin-top: 0;
+    margin-top   : 0;
     margin-bottom: 0;
-    font-family: WF Visual Sans,Arial,sans-serif;
-    font-size: 2.713rem;
-    font-weight: 600;
-    line-height: 1.04;
-    text-align: left;
+    font-family  : WF Visual Sans, Arial, sans-serif;
+    font-weight  : 600;
+    line-height  : 1.04;
+    text-align   : left;
+    width        : 100%;
 }
 
 #answer {
-    margin-top: 0;
+    margin-top   : 0;
     margin-bottom: 0;
-    font-family: WF Visual Sans,Arial,sans-serif;
-    font-size: 2.213rem;
-    font-weight: 600;
-    line-height: 1.04;
-    text-align: left;
+    font-family  : WF Visual Sans, Arial, sans-serif;
+    font-weight  : 600;
+    line-height  : 1.04;
+    text-align   : left;
+}
+
+#collapseExample .card-body h2 {
+    margin-bottom: 4rem;
+}
+
+#collapseExample .card-body h3 {
+    white-space: pre-wrap;
+}
+
+#collapseExample .card-body form button {
+    margin-right: 1rem;
+}
+
+#collapseExample .card-body form button:last-child {
+    margin-right: 0;
 }
 
 body {
@@ -44,36 +71,36 @@ body {
 
 .cardlist {
     background-color: #f7f7f7 !important;
-    border: 1px solid #e6e6e6;
-    border-radius: 0.25rem;
-    box-shadow: 0 0 0.5rem rgba(0,0,0,0.1);
+    border          : 1px solid #e6e6e6;
+    border-radius   : 0.25rem;
+    box-shadow      : 0 0 0.5rem rgba(0,0,0,0.1);
 }
 
 .card {
-    border: 1px solid #e6e6e6;
+    border       : 1px solid #e6e6e6;
     border-radius: 0.25rem;
-    box-shadow: 0 0 0.5rem rgba(0,0,0,0.1);
+    box-shadow   : 0 0 0.5rem rgba(0,0,0,0.1);
 }
 
 .section-header {
-    text-align: start;
-    font-family: WF Visual Sans,Arial,sans-serif;
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-top: 1rem;
+    text-align   : start;
+    font-family  : WF Visual Sans, Arial, sans-serif;
+    font-size    : 1.5rem;
+    font-weight  : 600;
+    margin-top   : 1rem;
     margin-bottom: 1rem;
 }
 
 .topic-header {
-    text-align: center;
-    font-family: WF Visual Sans,Arial,sans-serif;
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-top: 0.1rem;
+    text-align   : center;
+    font-family  : WF Visual Sans, Arial, sans-serif;
+    font-size    : 1.25rem;
+    font-weight  : 600;
+    margin-top   : 0.1rem;
     margin-bottom: 0.1rem;
 }
 
 pre code {
     white-space: pre-wrap;
-    word-break: break-word;
+    word-break : break-word;
 }
