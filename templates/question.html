@@ -1,7 +1,7 @@
 {% extends "layout.html" %} {% block title %} {{ query.topic }} : {{ query.id }} {% endblock %} {% block main %}
 
-<div id="question-box" class="container mt-5">
-  <h2 id="question-text" class="text-start m-2">Question</h2>
+<div id="question-box" class="container">
+  <h2 id="question-text" class="text-start m-2">{{ query.section }} / {{ query.topic }} Question # {{ query.id }}</h2>
   <div class="card">
     <div class="card-body">
       <h3 class="text-start">{{ query.question|safe }}</h3>
@@ -23,16 +23,13 @@
     <div class="card-body">
       <h3 class="text-start" id="answer">{{ query.answer|safe }}</h3>
       <br />
-      <form action="/answer/{{ query.topic }}/{{ query.id }}" method="POST">
+      <form action="/answer/{{ query.section }}/{{ query.topic }}/{{ query.id }}" method="POST">
         <button name="score" value="3" class="btn btn-primary">Again</button>
         <button name="score" value="2" class="btn btn-secondary">Hard</button>
         <button name="score" value="1" class="btn btn-success">Good</button>
         <button name="score" value="0" class="btn btn-info">Easy</button>
       </form>
     </div>
-  </div>
-  <div class="mt-3">
-    <p>{{ query.topic}} Question # {{ query.id }}</p>
   </div>
 </div>
 

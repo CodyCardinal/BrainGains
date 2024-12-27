@@ -12,18 +12,18 @@ def get_db_connection():
         return None
 
 
-def get_question(topic: str = None, id: int = None):
+def get_question(section: str = None, topic: str = None, id: int = None):
     con = get_db_connection()
     try:
-        if topic is None and id is not None:
+        if section is None and topic is None and id is not None:
             question = con.execute(
                 "SELECT * FROM questions WHERE sesh < 4 AND id = ?", (id,)).fetchone()
-        elif topic is not None and id is None:
+        elif section is not None and topic is not None and id is None:
             question = con.execute(
-                "SELECT * FROM questions WHERE sesh < 4 AND topic = ?", (topic,)).fetchone()
+                "SELECT * FROM questions WHERE sesh < 4 AND section = ? AND topic = ?", (section, topic)).fetchone()
         else:
             question = con.execute(
-                "SELECT * FROM questions WHERE id = ? AND topic = ?", (id, topic)).fetchone()
+                "SELECT * FROM questions WHERE id = ? AND section = ? AND topic = ?", (id, section, topic)).fetchone()
     except Exception as e:
         print(f"Error getting question: {e}")
         return None
@@ -32,11 +32,11 @@ def get_question(topic: str = None, id: int = None):
     return question
 
 
-def get_next_question(topic: str, id: int):
+def get_next_question(section: str, topic: str, id: int):
     con = get_db_connection()
     try:
         question = con.execute(
-            "SELECT * FROM questions WHERE sesh < 4 AND id > ? AND topic = ?", (id, topic)).fetchone()
+            "SELECT * FROM questions WHERE sesh < 4 AND id > ? AND section = ? AND topic = ?", (id, section, topic)).fetchone()
     except Exception as e:
         print(f"Error getting next question: {e}")
         return None

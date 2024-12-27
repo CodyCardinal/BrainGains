@@ -1,6 +1,4 @@
-{% extends "layout.html" %} 
-{% block title %} Index {% endblock %} 
-{% block main %}
+{% extends "layout.html" %} {% block title %} Index {% endblock %} {% block main %}
 <div class="col">
   <div class="row">
     <div class="col-md-6">
@@ -22,7 +20,9 @@
             <div class="row">
               {% for topic_info in topics %} {% set topic = topic_info.topic %}
               <div class="col-md-8">
-                <a href="/question/{{ topic }}" class="btn btn-outline-dark btn-block topic-header">{{ topic }}</a>
+                <a href="/question/{{ section }}/{{ topic }}" class="btn btn-outline-dark btn-block topic-header"
+                  >{{ topic }}</a
+                >
               </div>
               {% endfor %}
             </div>

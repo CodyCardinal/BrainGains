@@ -18,16 +18,16 @@ nav .navbar-brand .green {
     color: #2e944b;
 }
 
+.navbar {
+    z-index: 1000;
+}
+
 #question-text {
     margin-bottom: 20px;
 }
 
 #question-box {
-    display        : flex;
-    flex-direction : column;
-    justify-content: center;
-    height         : 75vh;
-    margin-top     : 20px;
+    margin-top : 100px;
 }
 
 #question {
