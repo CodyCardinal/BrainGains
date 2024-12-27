@@ -1,7 +1,7 @@
 {% extends "layout.html" %} {% block title %} {{ query.topic }} : {{ query.id }} {% endblock %} {% block main %}
 
 <div id="question-box" class="container">
-  <h2 id="question-text" class="text-start m-2">{{ query.section }} / {{ query.topic }} Question # {{ query.id }}</h2>
+  <h2 id="question-text" class="text-start m-2">Question > {{ query.section|e }} > {{ query.topic|e }} > {{ query.id|e }}</h2>
   <div class="card">
     <div class="card-body">
       <h3 class="text-start">{{ query.question|safe }}</h3>
