@@ -17,7 +17,7 @@ def index():
 @app.route("/init_db", methods=("GET", "POST"))
 def init_db():
     if request.method == "POST":
-        initialize_db()
+        reinitialize_db()
         return redirect(url_for("app.index"))
     return render_template("init_db.html")
 

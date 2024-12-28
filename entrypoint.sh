@@ -5,8 +5,7 @@ mkdir -p "$DATABASE_DIR"
 
 if [ ! -f "$DATABASE_PATH" ]; then
   echo "Database file not found at $DATABASE_PATH. Initializing database..."
-
-  flask initialize-db
+  flask db initialize
 else
   echo "Database file already exists at $DATABASE_PATH. Skipping initialization."
 fi

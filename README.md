@@ -18,54 +18,67 @@ In the above method, questions are sorted into groups according to how easily th
 
 In the above gif, we see that the first session starts with one container of questions. In the second session you're asked harder questions from the first session and the second containers questions. This process repeats until you're phased each question out into the final 5th container.
 
-## [Video Demo](https://www.youtube.com/watch?v=qdZy8P7B4JA)
-
-
-## Clone the Repo
-- Clone the Repo and Move into the directory.
-```sh
-  git clone https://github.com/CodyCardinal/BrainGains.git
-  cd BrainGains
-```
-- If you have a `flashcards.db`, place it in this directory.
-- Now choose to either launch via Python+Flask or a Docker Container.
-
-## Launch via Python and Flask:
-- Install Python 3.10+
-- Install the requirements with `pip install -r requirements.txt`
-- Run the flask app locally with `flask run`
-- Open your browser to `http://localhost:5000/`
+## [Outdated Video Demo](https://www.youtube.com/watch?v=qdZy8P7B4JA)
 
 ## Launch via Docker
 
 1. Download free and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
-2. Using your terminal of choice, move to the Braingains directory you created when you cloned the repo.
-3. Place your `flashcards.db` in it if you have one.
-4. Run the BrainGains container with the following command:
+2. Using your terminal of choice, change to the dir that you have `flashcards.db` backed up in.
+3. If you don't have a db yet, change to a new directory, and one will be created here once you begin.
+4. Run the BrainGains container from [dockerhub](https://hub.docker.com/r/codesxcodes/braingains) with the following command:
+
 ```sh
-   docker run -d -p 5000:5000 -v .:/app codesxcodes/braingains:latest
+   docker run -p 5000:5000 -v .:/app/db -e DATABASE_PATH=/app/db/flashcards.db codesxcodes/braingains:latest
 ```
 
-## Detailed How-To
+## Launch Locally via Python and Flask
 
-- While you are taking a course or lecture. You would create a new topic in BrainGains.
-- Throughout that course, when you go to take notes, [create](http://127.0.0.1:5000/create) a new question in BrainGains in that topic. 
-- You're welcome to use markdown if you like in question or answer, for code snippets, and Braingains has syntax highlighting too for most languages using `markdown2`.
-- Wait a few hours or overnight to practice recall and quiz yourself.
+- Install Python 3.10+
+- Clone the Repo and Move into the directory.
+
+```sh
+  git clone https://github.com/CodyCardinal/BrainGains.git
+  cd BrainGains
+```
+
+- If you have a `flashcards.db`, place it in the `db` directory and the app will use it.
+- Install the requirements with `pip install -r requirements.txt`
+- Run the flask app locally with `flask run`
+- Open your browser to `http://localhost:5000/`
+
+## Recommended Use
+
+## 1. Take a coding course
+
+- While you are taking a course or lecture. Use braingains to take notes in the form of flashcards.
+- When you go to take notes, [create](http://127.0.0.1:5000/create) a new question and answer in BrainGains, specifying that course and topic.
+- You can use markdown for code snippets, and Braingains will add code coloring for most languages using `markdown2`.
+
+## 2. Review what your learned over the next 6 days
+
+- Wait a few hours ( at least ) or overnight to practice recall and quiz yourself.
 - Choose that topic on the home page.
-- Proceed to read each question, mentally answer the question.
-- Once you've answered it mentally, click the question button to expand the answer.
+- Read each question, mentally answer the question.
+- Once you've answered it mentally, click the answer button to reveal the answer.
+  - Self Evalutate how you did in your answer.
   - If you want to try again, click Again.
-  - If you answered it correctly and easily, you would click Easy.
+  - If you answered it correctly and easily, click Easy.
   - If you answered it correctly, but not easily, click Good.
   - If you failed to answer it, you would click Hard.
-- Then proceed to the next question. Eventually you will be taken back to the front page once you've ehausted all questions in the topic.
-- Come back and answer questions again tomorrow. And you should then space out visits back to this topic over time. Use the Leitner System link for specific timing ( until I build in that feature! ). Over time you will notice that the questions you chose easy for will stop being offered to you.
+- Choosing will proceed to the next question.
+- Once you answer all questions in your current session, you will return to the index.
+
+## 3. Space out quizzing yourself again
+
+- Continue to re-take these questions daily for about [6 days](https://en.wikipedia.org/wiki/Spaced_repetition#/media/File:ForgettingCurve.svg)
+- Space out quizzing back to this topic over time. Let the app hide questions you have mastered. Or you can use the [Leitner System](https://en.wikipedia.org/wiki/Leitner_system).
+- Mastering a question means it has a session set to 4. Therefore answering "easy" three times in a row is what it takes to make a question no longer appear.
 - Once you aren't asked any questions in that topic, you're done with that topic. It is now time for a new Topic!
+- If you want to reset any questions, set their session back to 0.
 
 ## Newish Features and Bugfixes
 
-- Braingains published as a [Docker Container](https://hub.docker.com/repository/docker/codesxcodes/braingains/)!
+- Braingains is now published as a [Docker Container](https://hub.docker.com/repository/docker/codesxcodes/braingains/)!
 - DB reset is now an option on the [lists](http://127.0.0.1/lists) page.
 - No more manual init needed, if no `flashcards.db` is found, it will prompt you to create one.
 

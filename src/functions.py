@@ -3,13 +3,11 @@ import os
 from flask import flash
 from flask.cli import AppGroup
 
-db_file = 'flashcards.db'
 db_cli = AppGroup("db")
-DATABASE_PATH = os.getenv("DATABASE_PATH", "flashcards.db")
+DATABASE_PATH = os.getenv("DATABASE_PATH", "/app/db/flashcards.db")
 
 
-@db_cli.command("initialize")
-def initialize_db():
+def _initialize_db():
     if os.path.exists(DATABASE_PATH):
         print(
             f"The file '{DATABASE_PATH}' already exists. Cancelling DB initialization.")
@@ -44,20 +42,25 @@ def initialize_db():
         connection.close()
 
 
+@db_cli.command("initialize")
+def initialize_db():
+    _initialize_db()
+
+
 def reinitialize_db():
-    if os.path.exists(db_file):
-        flash(f"Deleting database file '{db_file}'", "info")
-        os.remove(db_file)
+    if os.path.exists(DATABASE_PATH):
+        flash(f"Deleting database file '{DATABASE_PATH}'", "info")
+        os.remove(DATABASE_PATH)
     flash("Reinitializing database", "info")
-    initialize_db()
+    _initialize_db()
 
 
 def get_db_connection():
-    if not os.path.exists(db_file):
-        print(f"Database file '{db_file}' does not exist.")
+    if not os.path.exists(DATABASE_PATH):
+        print(f"Database file '{DATABASE_PATH}' does not exist.")
         return None
     try:
-        con = sqlite3.connect(db_file)
+        con = sqlite3.connect(DATABASE_PATH)
         con.row_factory = sqlite3.Row
         return con
     except Exception as e:
