@@ -1,14 +1,14 @@
 import sqlite3
 import os
 from flask import flash
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask.cli import AppGroup
 
 db_cli = AppGroup("db")
 DATABASE_PATH = os.getenv("DATABASE_PATH", "/app/db/flashcards.db")
 leitner_boxes = 6
 
-
+# Database Handling
 def _initialize_db():
     if os.path.exists(DATABASE_PATH):
         print(
@@ -70,6 +70,23 @@ def get_db_connection():
         return None
 
 
+# Filters
+def jinja_filter_days_ago(date):
+    if date is None:
+        return "Never"
+    today = datetime.now().date()
+    date = datetime.strptime(date, '%Y-%m-%d %H:%M:%S.%f').date()
+    diff = (today - date).days
+
+    if diff == 0:
+        return "Today"
+    elif diff == 1:
+        return "Yesterday"
+    else:
+        return f"{diff} days ago"
+
+
+# Queries
 def get_question(section: str = None, topic: str = None, id: int = None):
     con = get_db_connection()
     if con is None:
@@ -297,6 +314,18 @@ def edit_section(topic: str, section: str):
     finally:
         con.close()
 
+def update_lastreview(id, time):
+    con = get_db_connection()
+    if con is None:
+        return
+    try:
+        con.execute("UPDATE QUESTIONS SET LASTREVIEW = ? WHERE ID = ?",
+                    (time, id))
+        con.commit()
+    except Exception as e:
+        print(f"Error updating last review: {e}")
+    finally:
+        con.close()
 
 def update_question(id, topic, question_text, answer, score, session, section, lastreview=None):
     con = get_db_connection()

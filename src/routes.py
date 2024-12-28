@@ -2,10 +2,10 @@ from flask import Blueprint, redirect, url_for, render_template, request, flash
 import markdown2
 from .functions import *
 
-app = Blueprint('app', __name__)
+bp = Blueprint('app', __name__)
 
 
-@app.route("/", methods=("GET", "POST"))
+@bp.route("/", methods=("GET", "POST"))
 def index():
     topics_by_section = get_topics_by_section()
     counts = get_total_questions_per_topic()
@@ -14,7 +14,7 @@ def index():
     return render_template("index.html", topics_by_section=topics_by_section, counts=counts)
 
 
-@app.route("/init_db", methods=("GET", "POST"))
+@bp.route("/init_db", methods=("GET", "POST"))
 def init_db():
     if request.method == "POST":
         reinitialize_db()
@@ -22,7 +22,7 @@ def init_db():
     return render_template("init_db.html")
 
 
-@app.route("/reset_db", methods=(["POST"]))
+@bp.route("/reset_db", methods=(["POST"]))
 def reset_db():
     if request.method == "POST":
         reinitialize_db()
@@ -30,13 +30,13 @@ def reset_db():
     return render_template("init_db.html")
 
 
-@app.route("/about")
+@bp.route("/about")
 def about():
     return render_template("about.html")
 
 
-@app.route("/question/<section>/<topic>", methods=("GET", "POST"))
-@app.route("/question/<section>/<topic>/<id>", methods=("GET", "POST"))
+@bp.route("/question/<section>/<topic>", methods=("GET", "POST"))
+@bp.route("/question/<section>/<topic>/<id>", methods=("GET", "POST"))
 def question(section: str = None, topic: str = None, id=None):
     if id:
         query = get_question(section, topic, id)
@@ -59,11 +59,13 @@ def question(section: str = None, topic: str = None, id=None):
         return redirect(url_for("app.index"))
 
 
-@app.route("/answer/<section>/<topic>/<id>", methods=("GET", "POST"))
+@bp.route("/answer/<section>/<topic>/<id>", methods=("GET", "POST"))
 def answer(section, topic, id):
     score = int(request.form["score"])
     update_score(id, score)
     update_sesh(id, score)
+    time = datetime.now()
+    update_lastreview(id, time)
     query = get_next_question(section, topic, id)
     if query is None:
         return redirect(url_for("app.index"))
@@ -73,7 +75,7 @@ def answer(section, topic, id):
     return redirect(url)
 
 
-@app.route("/create", methods=("GET", "POST"))
+@bp.route("/create", methods=("GET", "POST"))
 def create():
     if request.method == "POST":
         existing_section_and_topic = request.form.get(
@@ -108,7 +110,7 @@ def create():
         return render_template("create.html", topics_by_section=topics_by_section, counts=counts, latest_topic=latest_topic, latest_section=latest_section)
 
 
-@app.route("/list", methods=("GET", "POST"))
+@bp.route("/list", methods=("GET", "POST"))
 def list():
     if request.method == "POST":
         query = select(request.form.get("topic"))
@@ -121,7 +123,7 @@ def list():
         return render_template("list.html", query=query, topics_by_section=topics_by_section)
 
 
-@app.route("/edit/<int:id>", methods=("GET", "POST"))
+@bp.route("/edit/<int:id>", methods=("GET", "POST"))
 def edit(id):
     if request.method == "POST":
         topic = request.form["topic"]
@@ -142,7 +144,7 @@ def edit(id):
         return render_template("edit.html", question=question)
 
 
-@app.route("/editTopic/<path:topic>", methods=("GET", "POST"))
+@bp.route("/editTopic/<path:topic>", methods=("GET", "POST"))
 def editTopic(topic):
     if request.method == "POST":
         newSection = request.form["section"]
@@ -158,7 +160,7 @@ def editTopic(topic):
         return render_template("editTopic.html", topic=topic, section=section)
 
 
-@app.route("/delete/<int:id>", methods=("POST",))
+@bp.route("/delete/<int:id>", methods=("POST",))
 def delete(id):
     question = get_question_by_id(id)
     if question is None:
@@ -168,7 +170,7 @@ def delete(id):
     return redirect(url_for("app.list"))
 
 
-@app.route("/deleteTopic/<topic>", methods=("POST",))
+@bp.route("/deleteTopic/<topic>", methods=("POST",))
 def deleteTopic(topic):
     deleteATopic(topic)
     return redirect(url_for("app.list"))
