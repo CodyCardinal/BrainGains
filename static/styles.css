@@ -1,106 +1,107 @@
 nav .navbar-brand {
-    font-size: xx-large;
+  font-size: xx-large;
 }
 
 nav .navbar-brand .blue {
-    color: #537fbe;
+  color: #537fbe;
 }
 
 nav .navbar-brand .red {
-    color: #ea433b;
+  color: #ea433b;
 }
 
 nav .navbar-brand .yellow {
-    color: #f5b82e;
+  color: #f5b82e;
 }
 
 nav .navbar-brand .green {
-    color: #2e944b;
+  color: #2e944b;
 }
 
 .navbar {
-    z-index: 1000;
+  z-index: 1000;
 }
 
 #question-text {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 #question-box {
-    margin-top : 100px;
+  margin-top: 100px;
 }
 
+
 #question {
-    margin-top   : 0;
-    margin-bottom: 0;
-    font-family  : WF Visual Sans, Arial, sans-serif;
-    font-weight  : 600;
-    line-height  : 1.04;
-    text-align   : left;
-    width        : 100%;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: WF Visual Sans, Arial, sans-serif;
+  font-weight: 600;
+  line-height: 1.04;
+  text-align: left;
+  width: 100%;
 }
 
 #answer {
-    margin-top   : 0;
-    margin-bottom: 0;
-    font-family  : WF Visual Sans, Arial, sans-serif;
-    font-weight  : 600;
-    line-height  : 1.04;
-    text-align   : left;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-family: WF Visual Sans, Arial, sans-serif;
+  font-weight: 600;
+  line-height: 1.04;
+  text-align: left;
 }
 
 #collapseExample .card-body h2 {
-    margin-bottom: 4rem;
+  margin-bottom: 4rem;
 }
 
 #collapseExample .card-body h3 {
-    white-space: pre-wrap;
+  white-space: pre-wrap;
 }
 
 #collapseExample .card-body form button {
-    margin-right: 1rem;
+  margin-right: 1rem;
 }
 
 #collapseExample .card-body form button:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 body {
-    background-color: #f7f7f7 !important;
+  background-color: #f7f7f7 !important;
 }
 
 .cardlist {
-    background-color: #f7f7f7 !important;
-    border          : 1px solid #e6e6e6;
-    border-radius   : 0.25rem;
-    box-shadow      : 0 0 0.5rem rgba(0,0,0,0.1);
+  background-color: #f7f7f7 !important;
+  border: 1px solid #e6e6e6;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
 }
 
 .card {
-    border       : 1px solid #e6e6e6;
-    border-radius: 0.25rem;
-    box-shadow   : 0 0 0.5rem rgba(0,0,0,0.1);
+  border: 1px solid #e6e6e6;
+  border-radius: 0.25rem;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
 }
 
 .section-header {
-    text-align   : start;
-    font-family  : WF Visual Sans, Arial, sans-serif;
-    font-size    : 1.5rem;
-    font-weight  : 600;
-    margin-top   : 1rem;
-    margin-bottom: 1rem;
+  text-align: start;
+  font-family: WF Visual Sans, Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .topic-header {
-    text-align   : center;
-    font-family  : WF Visual Sans, Arial, sans-serif;
-    font-size    : 1.25rem;
-    font-weight  : 600;
-    margin-top   : 0.1rem;
-    margin-bottom: 0.1rem;
+  text-align: center;
+  font-family: WF Visual Sans, Arial, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 0.1rem;
+  margin-bottom: 0.1rem;
 }
 
 pre code {
-    white-space: pre-wrap;
-    word-break : break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
