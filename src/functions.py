@@ -1,26 +1,34 @@
 import sqlite3
 import os
 from flask import flash
+from flask.cli import AppGroup
 
 db_file = 'flashcards.db'
+db_cli = AppGroup("db")
+DATABASE_PATH = os.getenv("DATABASE_PATH", "flashcards.db")
 
+
+@db_cli.command("initialize")
 def initialize_db():
-    if os.path.exists(db_file):
-        flash(f"The file '{db_file}' already exists. Cancelling DB initialization", "error")
+    if os.path.exists(DATABASE_PATH):
+        print(
+            f"The file '{DATABASE_PATH}' already exists. Cancelling DB initialization.")
         return
     else:
-        flash(f"The file '{db_file}' does not exist. Creating a new one.", "info")
-        connection = sqlite3.connect(db_file)
+        print(
+            f"The file '{DATABASE_PATH}' does not exist. Creating a new one.")
+        connection = sqlite3.connect(DATABASE_PATH)
 
     try:
-        flash(f"Creating schema for '{db_file}' using 'schema.sql'", "info")
+        print(f"Creating schema for '{DATABASE_PATH}' using 'schema.sql'.")
         with open('schema.sql') as f:
             connection.executescript(f.read())
     except Exception as e:
-        flash(f"Error connecting to DB: {e}", "error")
+        print(f"Error connecting to DB: {e}")
+        return
 
     try:
-        flash("Inserting sample data into the database", "info")
+        print("Inserting sample data into the database.")
         cur = connection.cursor()
         cur.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH, SECTION) VALUES (?, ?, ?, ?, ?, ?)",
                     (1, 'HTML', 'What does HTML Stand For?', 'HyperText Markup Language', 1, 'Web Development'))
@@ -28,12 +36,13 @@ def initialize_db():
                     (1, 'SQL', 'What does SQL stand for?', 'Structured Query Language', 1, 'Databases'))
         cur.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH, SECTION) VALUES (?, ?, ?, ?, ?, ?)",
                     (1, 'Python', 'What does Python stand for?', 'Python Programming Language', 1, 'Programming Languages'))
-        flash("Database Initialized Successfully", "success")
+        print("Database Initialized Successfully.")
     except Exception as e:
-        flash(f"Error Initializing Database: {e}", "error")
+        print(f"Error Initializing Database: {e}")
     finally:
         connection.commit()
         connection.close()
+
 
 def reinitialize_db():
     if os.path.exists(db_file):
@@ -41,6 +50,7 @@ def reinitialize_db():
         os.remove(db_file)
     flash("Reinitializing database", "info")
     initialize_db()
+
 
 def get_db_connection():
     if not os.path.exists(db_file):

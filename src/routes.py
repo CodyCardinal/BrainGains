@@ -1,6 +1,5 @@
 from flask import Blueprint, redirect, url_for, render_template, request, flash
 import markdown2
-import os
 from .functions import *
 
 app = Blueprint('app', __name__)

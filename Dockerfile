@@ -8,12 +8,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-EXPOSE 5000
-
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=development
 ENV FLASK_DEBUG=1
 ENV FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
+ENV FLASK_RUN_HOST=0.0.0.0
+ENV DATABASE_PATH=/app/flashcards.db
 
-# Run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+EXPOSE 5000
+
+ENTRYPOINT [ "/entrypoint.sh" ]
+
