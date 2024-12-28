@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+
+{% block title %} Initialize Database {% endblock %}
+
+{% block main %}
+<div class="container mt-5">
+    <h1>Database Initialization</h1>
+    <p>The database file <code>flashcards.db</code> was not found. Would you like to initialize the database?</p>
+    <form action="{{ url_for('app.init_db') }}" method="POST">
+        <button type="submit" class="btn btn-primary">Initialize Database</button>
+    </form>
+</div>
+{% endblock %}

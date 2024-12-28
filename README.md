@@ -20,19 +20,38 @@ In the above gif, we see that the first session starts with one container of que
 
 ## [Video Demo](https://www.youtube.com/watch?v=qdZy8P7B4JA)
 
-## How to start
 
+## Clone the Repo
+- Clone the Repo and Move into the directory.
+```sh
+  git clone https://github.com/CodyCardinal/BrainGains.git
+  cd BrainGains
+```
+- If you have a `flashcards.db`, place it in this directory.
+- Now choose to either launch via Python+Flask or a Docker Container.
+
+## Launch via Python and Flask:
 - Install Python 3.10+
 - Install the requirements with `pip install -r requirements.txt`
-- If you don't already have flashcards.db, then initialize the Database with `python init_db.py`
 - Run the flask app locally with `flask run`
 - Open your browser to `http://localhost:5000/`
+
+## Launch via Docker
+
+1. Download free and install [Docker Desktop](https://www.docker.com/products/docker-desktop/).
+2. Using your terminal of choice, move to the Braingains directory you created when you cloned the repo.
+3. Place your `flashcards.db` in it if you have one.
+4. Run the BrainGains container with the following command:
+```sh
+   docker run -d -p 5000:5000 -v .:/app codesxcodes/braingains:latest
+```
 
 ## Detailed How-To
 
 - While you are taking a course or lecture. You would create a new topic in BrainGains.
-- Throughout that course, when you go to take notes, you would create a new question in BrainGains in that topic.
-- Wait a few hours or overnight to practice recall.
+- Throughout that course, when you go to take notes, [create](http://127.0.0.1:5000/create) a new question in BrainGains in that topic. 
+- You're welcome to use markdown if you like in question or answer, for code snippets, and Braingains has syntax highlighting too for most languages using `markdown2`.
+- Wait a few hours or overnight to practice recall and quiz yourself.
 - Choose that topic on the home page.
 - Proceed to read each question, mentally answer the question.
 - Once you've answered it mentally, click the question button to expand the answer.
@@ -46,8 +65,9 @@ In the above gif, we see that the first session starts with one container of que
 
 ## Newish Features and Bugfixes
 
-- Sections and Markdown support added.
-- Code refactor, moved functions and routes into their own file. implementing blueprints.
+- Braingains published as a [Docker Container](https://hub.docker.com/repository/docker/codesxcodes/braingains/)!
+- DB reset is now an option on the [lists](http://127.0.0.1/lists) page.
+- No more manual init needed, if no `flashcards.db` is found, it will prompt you to create one.
 
 ## Possible Features List/To Do
 
@@ -60,6 +80,8 @@ In the above gif, we see that the first session starts with one container of que
 
 ## Completed Features List
 
+- ~~Sections and Markdown support added.~~
+- ~~Code refactor, moved functions and routes into their own file. implementing blueprints.~~
 - ~~move either routes or crud functions into their own library for reuse.~~
 - ~~Sections for topics. So the hierarchy is sections>topics>questions.~~
 - ~~Markdown support for questions and answers~~
