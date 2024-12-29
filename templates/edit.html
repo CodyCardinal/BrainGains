@@ -16,21 +16,17 @@ Edit Card
             <input type="text" class="form-control" id="topic" name="topic" value="{{ question.topic }}">
         </div>
         <div class="form-group col-md-6">
-            <label for="score">Score</label>
-            <input type="number" min="0" max="5" class="form-control" id="score" name="score" value="{{ question.score }}">
-        </div>
-        <div class="form-group col-md-6">
-            <label for="session">Session</label>
-            <input type="number" min="1" max="4" class="form-control" id="session" name="session" value="{{ question.sesh }}">
+            <label for="box">Box</label>
+            <input type="number" min="1" max="6" class="form-control" id="box" name="box" value="{{ question.box }}">
         </div>
     </div>
     <div class="form-group">
         <label for="question">Question</label>
-        <textarea class="form-control" id="question" name="question" rows="5">{{ question.question }}</textarea>
+        <textarea class="form-control" id="question" name="question" rows="7">{{ question.question }}</textarea>
     </div>
     <div class="form-group">
         <label for="answer">Answer</label>
-        <textarea class="form-control" id="answer" name="answer" rows="5">{{ question.answer }}</textarea>
+        <textarea class="form-control" id="answer" name="answer" rows="7">{{ question.answer }}</textarea>
     </div>
     <button type="submit" class="btn btn-primary">Update</button>
 </form>

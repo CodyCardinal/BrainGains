@@ -62,8 +62,7 @@ def question(section: str = None, topic: str = None, id=None):
 @bp.route("/answer/<section>/<topic>/<id>", methods=("GET", "POST"))
 def answer(section, topic, id):
     score = int(request.form["score"])
-    update_score(id, score)
-    update_sesh(id, score)
+    update_box(id, score)
     time = datetime.now()
     update_lastreview(id, time)
     query = get_next_question(section, topic, id)
@@ -129,11 +128,10 @@ def edit(id):
         topic = request.form["topic"]
         question_text = request.form["question"]
         answer = request.form["answer"]
-        score = request.form["score"]
-        session = request.form["session"]
+        box = request.form["box"]
         section = request.form["section"]
         update_question(id, topic, question_text,
-                        answer, score, session, section)
+                        answer, box, section)
         return redirect(url_for("app.list"))
     else:
         question = get_question_by_id(id)

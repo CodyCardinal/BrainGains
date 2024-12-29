@@ -31,10 +31,9 @@
               <thead>
                 <tr>
                   <th class="text-center">id</th>
-                  <th class="text-center">Score</th>
                   <th class="text-center">Question</th>
                   <th class="text-start">Answer</th>
-                  <th class="text-start">Session</th>
+                  <th class="text-start">Box</th>
                 </tr>
               </thead>
               <tbody>
@@ -43,10 +42,9 @@
                   <td class="text-center">
                     <a href="{{ url_for('app.edit', id=question.id) }}">{{ question.id }}</a>
                   </td>
-                  <td class="text-center">{{ question.score }}</td>
                   <td class="text-start">{{ question.question }}</td>
                   <td class="text-start">{{ question.answer }}</td>
-                  <td class="text-center">{{ question.sesh }}</td>
+                  <td class="text-center">{{ question.box }}</td>
                 </tr>
               {% endfor %}
               </tbody>

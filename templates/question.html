@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block title %} {{ query.topic }} : {{ query.id }} {% endblock %} {% block main %}
 
-<div id="question-box" class="container">
+<div id="question-box" class="container position-relative">
   <h2 id="question-text" class="text-start m-2">
     Question > {{ query.section|e }} > {{ query.topic|e }} > {{ query.id|e }}
   </h2>
@@ -8,29 +8,61 @@
     <div class="card-body">
       <h3 class="text-start">{{ query.question|safe }}</h3>
       <div class="text-end">Last Review > {{ query.lastreview|days_ago }}</div>
-      <button
-        id="answer-button"
-        class="btn btn-outline-dark btn-lg float-end mt-3"
-        data-bs-toggle="collapse"
-        href="#collapseExample"
-        role="button"
-        aria-expanded="false"
-        aria-controls="collapseExample"
-        onclick="revealAnswer()">
-        Show Answer &#x2B07;
-      </button>
+      <div class="row align-items-end position-relative">
+        <div class="col text-center position-absolute start-50 translate-middle-x">
+          {{ query.box|question_boxes|safe }}
+        </div>
+        <div class="show-answer-button-container col text-end">
+          <button
+            id="show-answer-button"
+            class="btn btn-outline-dark btn-lg mt-3"
+            data-bs-toggle="collapse"
+            href="#collapseExample"
+            role="button"
+            aria-expanded="false"
+            aria-controls="collapseExample"
+            onclick="revealAnswer()">
+            Show Answer &#x2B07;
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <h2 id="answer-text" class="text-start m-2" style="display: none">Answer</h2>
   <div class="collapse card" id="collapseExample">
     <div class="card-body">
       <h3 class="text-start" id="answer">{{ query.answer|safe }}</h3>
-      <br />
+      <div class="text-center">{{ query.box|answer_boxes|safe }}</div>
       <form action="/answer/{{ query.section }}/{{ query.topic }}/{{ query.id }}" method="POST">
-        <button name="score" value="3" class="btn btn-primary">Again</button>
-        <button name="score" value="2" class="btn btn-secondary">Hard</button>
-        <button name="score" value="1" class="btn btn-success">Good</button>
-        <button name="score" value="0" class="btn btn-info">Easy</button>
+        <div class="row justify-content-center">
+          <div class="col-auto">
+            <button
+              name="score"
+              value="1"
+              class="answer-button btn btn-outline-dark d-flex align-items-center justify-content-center flex-column">
+              <div class="text-center">Incorrect</div>
+              <div class="d-flex justify-content-center">
+                <i class="answer-button-icon bi bi-1-square-fill m-1"></i>
+                <i class="answer-button-icon bi bi-arrow-left m-1"></i>
+                <i class="answer-button-icon box-current bi bi-{{ query.box }}-square-fill m-1 text-success"></i>
+              </div>
+            </button>
+          </div>
+          <div class="col-auto">
+            <button
+              name="score"
+              value="{{ query.box + 1}}"
+              class="answer-button btn btn-outline-dark d-flex align-items-center justify-content-center flex-column">
+              <div class="text-center">Correct</div>
+              <div class="d-flex justify-content-center">
+                <i class="answer-button-icon box-current bi bi-{{ query.box }}-square-fill m-1 text-success"></i>
+                <i class="answer-button-icon bi bi-arrow-right m-1"></i>
+                <i
+                  class="answer-button-icon box-next bi bi-{% if query.box + 1 == 6 %}mortarboard-fill{% else %}{{ query.box + 1 }}-square-fill{% endif %} m-1 text-info"></i>
+              </div>
+            </button>
+          </div>
+        </div>
       </form>
     </div>
   </div>
@@ -38,7 +70,7 @@
 
 <script>
   function revealAnswer() {
-    var button = document.getElementById("answer-button");
+    var button = document.getElementById("show-answer-button");
     button.innerHTML = "Answer Revealed";
     button.classList.add("disabled");
     button.setAttribute("aria-disabled", "true");
