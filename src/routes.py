@@ -113,13 +113,21 @@ def create():
 def list():
     if request.method == "POST":
         query = select(request.form.get("topic"))
-        return render_template("list.html", query=query)
     else:
         query = select()
-        topics_by_section = get_topics_by_section()
-        if query is None or topics_by_section is None:
-            return render_template("init_db.html")
-        return render_template("list.html", query=query, topics_by_section=topics_by_section)
+
+    topics_by_section = get_topics_by_section()
+    if query is None or topics_by_section is None:
+        return render_template("init_db.html")
+
+    mastered_topics = {}
+    for section, topics in topics_by_section.items():
+        for topic_info in topics:
+            topic = topic_info['topic']
+            mastered_topics[(section, topic)] = are_all_questions_mastered(
+                section, topic)
+
+    return render_template("list.html", query=query, topics_by_section=topics_by_section, mastered_topics=mastered_topics)
 
 
 @bp.route("/edit/<int:id>", methods=("GET", "POST"))

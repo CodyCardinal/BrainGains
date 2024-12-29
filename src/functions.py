@@ -6,9 +6,20 @@ from flask.cli import AppGroup
 
 db_cli = AppGroup("db")
 DATABASE_PATH = os.getenv("DATABASE_PATH", "/app/db/flashcards.db")
+
 leitner_boxes = 6
 
+leitner_intervals = {
+    1: 1,   # Box 1: Review every day
+    2: 2,   # Box 2: Review every 2 days
+    3: 4,   # Box 3: Review every 4 days
+    4: 8,   # Box 4: Review every 8 days
+    5: 16   # Box 5: Review every 16 days
+}
+
 # Database Handling
+
+
 def _initialize_db():
     if os.path.exists(DATABASE_PATH):
         print(
@@ -76,21 +87,36 @@ def get_question(section: str = None, topic: str = None, id: int = None):
     if con is None:
         return None
     try:
-        if section is None and topic is None and id is not None:
-            question = con.execute(
-                "SELECT * FROM questions WHERE box < ? AND id = ?", (leitner_boxes, id)).fetchone()
-        elif section is not None and topic is not None and id is None:
-            question = con.execute(
-                "SELECT * FROM questions WHERE box < ? AND section = ? AND topic = ?", (leitner_boxes, section, topic)).fetchone()
-        else:
-            question = con.execute(
-                "SELECT * FROM questions WHERE id = ? AND section = ? AND topic = ?", (id, section, topic)).fetchone()
+        query = "SELECT * FROM questions WHERE box < ?"
+        params = [leitner_boxes]
+
+        if id is not None:
+            query += " AND id = ?"
+            params.append(id)
+        if section is not None:
+            query += " AND section = ?"
+            params.append(section)
+        if topic is not None:
+            query += " AND topic = ?"
+            params.append(topic)
+
+        questions = con.execute(query, params).fetchall()
+        today = datetime.now().date()
+
+        for question in questions:
+            if question['LASTREVIEW'] is None:
+                return question
+            last_review_date = datetime.strptime(
+                question['LASTREVIEW'], '%Y-%m-%d %H:%M:%S.%f').date()
+            interval = leitner_intervals.get(question['BOX'], 1)
+            if (today - last_review_date).days >= interval:
+                return question
     except Exception as e:
         print(f"Error getting question: {e}")
         return None
     finally:
         con.close()
-    return question
+    return None
 
 
 def get_next_question(section: str, topic: str, id: int):
@@ -98,14 +124,25 @@ def get_next_question(section: str, topic: str, id: int):
     if con is None:
         return None
     try:
-        question = con.execute(
-            "SELECT * FROM questions WHERE box < ? AND id > ? AND section = ? AND topic = ?", (leitner_boxes, id, section, topic)).fetchone()
+        query = "SELECT * FROM questions WHERE box < ? AND id > ? AND section = ? AND topic = ?"
+        params = [leitner_boxes, id, section, topic]
+        questions = con.execute(query, params).fetchall()
+        today = datetime.now().date()
+
+        for question in questions:
+            if question['LASTREVIEW'] is None:
+                return question
+            last_review_date = datetime.strptime(
+                question['LASTREVIEW'], '%Y-%m-%d %H:%M:%S.%f').date()
+            interval = leitner_intervals.get(question['BOX'], 1)
+            if (today - last_review_date).days >= interval:
+                return question
     except Exception as e:
         print(f"Error getting next question: {e}")
         return None
     finally:
         con.close()
-    return question if question else None
+    return None
 
 
 def select(topic: str = None) -> list:
@@ -273,6 +310,7 @@ def edit_section(topic: str, section: str):
     finally:
         con.close()
 
+
 def update_lastreview(id, time):
     con = get_db_connection()
     if con is None:
@@ -285,6 +323,7 @@ def update_lastreview(id, time):
         print(f"Error updating last review: {e}")
     finally:
         con.close()
+
 
 def update_question(id, topic, question_text, answer, box, section, lastreview=None):
     con = get_db_connection()
@@ -342,5 +381,21 @@ def deleteATopic(topic):
         con.commit()
     except Exception as e:
         print(f"Error deleting topic: {e}")
+    finally:
+        con.close()
+
+
+def are_all_questions_mastered(section: str, topic: str) -> bool:
+    con = get_db_connection()
+    if con is None:
+        return False
+    try:
+        query = "SELECT COUNT(*) FROM questions WHERE section = ? AND topic = ? AND box != 6"
+        params = [section, topic]
+        count = con.execute(query, params).fetchone()[0]
+        return count == 0
+    except Exception as e:
+        print(f"Error checking if all questions are mastered: {e}")
+        return False
     finally:
         con.close()
