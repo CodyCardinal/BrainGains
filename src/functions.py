@@ -1,9 +1,11 @@
 import sqlite3
 import os
-from flask import flash
+import logging
 from datetime import datetime
 from flask.cli import AppGroup
 
+logging.basicConfig(level=logging.DEBUG,
+                    format='%(asctime)s - %(levelname)s - %(message)s')
 db_cli = AppGroup("db")
 DATABASE_PATH = os.getenv("DATABASE_PATH", "/app/db/flashcards.db")
 
@@ -22,24 +24,25 @@ leitner_intervals = {
 
 def _initialize_db():
     if os.path.exists(DATABASE_PATH):
-        print(
+        logging.debug(
             f"The file '{DATABASE_PATH}' already exists. Cancelling DB initialization.")
         return
     else:
-        print(
+        logging.debug(
             f"The file '{DATABASE_PATH}' does not exist. Creating a new one.")
         connection = sqlite3.connect(DATABASE_PATH)
 
     try:
-        print(f"Creating schema for '{DATABASE_PATH}' using 'schema.sql'.")
+        logging.debug(
+            f"Creating schema for '{DATABASE_PATH}' using 'schema.sql'.")
         with open('schema.sql') as f:
             connection.executescript(f.read())
     except Exception as e:
-        print(f"Error connecting to DB: {e}")
+        logging.error(f"Error connecting to DB: {e}")
         return
 
     try:
-        print("Inserting sample data into the database.")
+        logging.debug("Inserting sample data into the database.")
         cur = connection.cursor()
         cur.execute("INSERT INTO QUESTIONS (TOPIC, QUESTION, ANSWER, BOX, SECTION, LASTREVIEW) VALUES (?, ?, ?, ?, ?, ?)",
                     ('HTML', 'What does HTML Stand For?', 'HyperText Markup Language', 1, 'Web Development', None))
@@ -47,9 +50,9 @@ def _initialize_db():
                     ('SQL', 'What does SQL stand for?', 'Structured Query Language', 1, 'Databases', None))
         cur.execute("INSERT INTO QUESTIONS (TOPIC, QUESTION, ANSWER, BOX, SECTION, LASTREVIEW) VALUES (?, ?, ?, ?, ?, ?)",
                     ('Python', 'What does Python stand for?', 'Python Programming Language', 1, 'Programming Languages', None))
-        print("Database Initialized Successfully.")
+        logging.debug("Database Initialized Successfully.")
     except Exception as e:
-        print(f"Error Initializing Database: {e}")
+        logging.error(f"Error Initializing Database: {e}")
     finally:
         connection.commit()
         connection.close()
@@ -62,27 +65,27 @@ def initialize_db():
 
 def reinitialize_db():
     if os.path.exists(DATABASE_PATH):
-        flash(f"Deleting database file '{DATABASE_PATH}'", "info")
+        logging.debug(f"Deleting database file '{DATABASE_PATH}'", "info")
         os.remove(DATABASE_PATH)
-    flash("Reinitializing database", "info")
+    logging.debug("Reinitializing database", "info")
     _initialize_db()
 
 
 def get_db_connection():
     if not os.path.exists(DATABASE_PATH):
-        print(f"Database file '{DATABASE_PATH}' does not exist.")
+        logging.debug(f"Database file '{DATABASE_PATH}' does not exist.")
         return None
     try:
         con = sqlite3.connect(DATABASE_PATH)
         con.row_factory = sqlite3.Row
         return con
     except Exception as e:
-        print(f"Error connecting to database: {e}")
+        logging.error(f"Error connecting to database: {e}")
         return None
 
 
 # Queries
-def get_question(section: str = None, topic: str = None, id: int = None):
+def get_question(section: str = None, topic: str = None, id: int = None, min_id: int = None):
     con = get_db_connection()
     if con is None:
         return None
@@ -99,46 +102,32 @@ def get_question(section: str = None, topic: str = None, id: int = None):
         if topic is not None:
             query += " AND topic = ?"
             params.append(topic)
+        if min_id is not None:
+            query += " AND id > ?"
+            params.append(min_id)
 
         questions = con.execute(query, params).fetchall()
         today = datetime.now().date()
 
         for question in questions:
             if question['LASTREVIEW'] is None:
+                logging.debug(
+                    f"Returning unanswered question from {section}>{topic}>{id}")
                 return question
             last_review_date = datetime.strptime(
                 question['LASTREVIEW'], '%Y-%m-%d %H:%M:%S.%f').date()
             interval = leitner_intervals.get(question['BOX'], 1)
             if (today - last_review_date).days >= interval:
+                logging.debug(
+                    f"Returning question in box {interval} from {section}>{topic}>{id}")
+                return question
+            # Include questions that should be reviewed today
+            if interval == 1 and (today - last_review_date).days == 0:
+                logging.debug(
+                    f"Returning question in box {interval} from {section}>{topic}>{id}")
                 return question
     except Exception as e:
-        print(f"Error getting question: {e}")
-        return None
-    finally:
-        con.close()
-    return None
-
-
-def get_next_question(section: str, topic: str, id: int):
-    con = get_db_connection()
-    if con is None:
-        return None
-    try:
-        query = "SELECT * FROM questions WHERE box < ? AND id > ? AND section = ? AND topic = ?"
-        params = [leitner_boxes, id, section, topic]
-        questions = con.execute(query, params).fetchall()
-        today = datetime.now().date()
-
-        for question in questions:
-            if question['LASTREVIEW'] is None:
-                return question
-            last_review_date = datetime.strptime(
-                question['LASTREVIEW'], '%Y-%m-%d %H:%M:%S.%f').date()
-            interval = leitner_intervals.get(question['BOX'], 1)
-            if (today - last_review_date).days >= interval:
-                return question
-    except Exception as e:
-        print(f"Error getting next question: {e}")
+        logging.error(f"Error getting question: {e}")
         return None
     finally:
         con.close()
@@ -159,7 +148,7 @@ def select(topic: str = None) -> list:
         else:
             topics = con.execute("SELECT * FROM QUESTIONS").fetchall()
     except Exception as e:
-        print(f"Error selecting questions: {e}")
+        logging.error(f"Error selecting questions: {e}")
         return []
     return topics
 
@@ -172,7 +161,7 @@ def topicSelect() -> list:
         topics = con.execute(
             "SELECT topic FROM questions GROUP BY topic ORDER BY MAX(id) DESC;").fetchall()
     except Exception as e:
-        print(f"error retrieving topics: {e}")
+        logging.error(f"error retrieving topics: {e}")
         return []
     topics = [row[0] for row in topics]
     return topics
@@ -191,7 +180,7 @@ def update_box(id: int, score: int):
             'UPDATE questions SET box = ? WHERE id = ?', (score, id))
         con.commit()
     except Exception as e:
-        print(f"Error updating box: {e}")
+        logging.error(f"Error updating box: {e}")
         return None
     finally:
         con.close()
@@ -206,11 +195,27 @@ def get_box(id: int):
         box = con.execute(
             "SELECT box FROM questions WHERE id = ?", (id,)).fetchone()
     except Exception as e:
-        print(f"Error getting box: {e}")
+        logging.error(f"Error getting box: {e}")
         return None
     finally:
         con.close()
     return box
+
+
+def reset_questions(section: str, topic: str):
+    con = get_db_connection()
+    if con is None:
+        return False
+    try:
+        con.execute(
+            "UPDATE questions SET box = 1, lastreview = NULL WHERE section = ? AND topic = ?", (section, topic))
+        con.commit()
+        return True
+    except Exception as e:
+        logging.error(f"Error resetting questions: {e}")
+        return False
+    finally:
+        con.close()
 
 
 def get_topics_by_section():
@@ -221,7 +226,7 @@ def get_topics_by_section():
         sections = con.execute(
             "SELECT SECTION, TOPIC, COUNT(*) as COUNT FROM QUESTIONS GROUP BY SECTION, TOPIC;").fetchall()
     except Exception as e:
-        print(f"Error getting topics by section: {e}")
+        logging.error(f"Error getting topics by section: {e}")
         return None
     finally:
         con.close()
@@ -244,7 +249,7 @@ def get_section_by_topic(topic: str):
         section = con.execute(
             "SELECT SECTION FROM QUESTIONS WHERE TOPIC = ? LIMIT 1", (topic.strip(),)).fetchone()
     except Exception as e:
-        print(f"Error getting section by topic: {e}")
+        logging.error(f"Error getting section by topic: {e}")
         return ''
     finally:
         con.close()
@@ -259,7 +264,7 @@ def get_total_questions_per_topic():
         counts = con.execute(
             "SELECT TOPIC, COUNT(*) FROM QUESTIONS GROUP BY TOPIC;").fetchall()
     except Exception as e:
-        print(f"Error getting total questions per topic: {e}")
+        logging.error(f"Error getting total questions per topic: {e}")
         return None
     finally:
         con.close()
@@ -275,7 +280,7 @@ def get_total_uncompleted_questions_per_topic():
         counts = con.execute(
             "SELECT TOPIC, COUNT(*) FROM QUESTIONS WHERE BOX < 6 GROUP BY TOPIC;").fetchall()
     except Exception as e:
-        print(f"Error getting total questions per topic: {e}")
+        logging.error(f"Error getting total questions per topic: {e}")
         return None
     finally:
         con.close()
@@ -291,7 +296,7 @@ def get_uncompleted_topics_by_section():
         sections = con.execute(
             "SELECT SECTION, TOPIC, COUNT(*) as COUNT FROM QUESTIONS WHERE BOX < 6 GROUP BY SECTION, TOPIC;").fetchall()
     except Exception as e:
-        print(f"Error getting topics by section: {e}")
+        logging.error(f"Error getting topics by section: {e}")
         return None
     finally:
         con.close()
@@ -305,6 +310,7 @@ def get_uncompleted_topics_by_section():
         topics_by_section[section].append({'topic': topic, 'count': count})
     return topics_by_section
 
+
 def create_new_question(topic, question, answer, section):
     con = get_db_connection()
     if con is None:
@@ -314,7 +320,7 @@ def create_new_question(topic, question, answer, section):
                     (topic.strip(), question.strip(), answer.strip(), 1, section.strip(), None))
         con.commit()
     except Exception as e:
-        print(f"Error creating new question: {e}")
+        logging.error(f"Error creating new question: {e}")
         return False
     finally:
         con.close()
@@ -330,7 +336,7 @@ def edit_topic(old_topic: str, new_topic: str):
                     (new_topic.strip(), old_topic.strip()))
         con.commit()
     except Exception as e:
-        print(f"Error updating topic: {e}")
+        logging.error(f"Error updating topic: {e}")
     finally:
         con.close()
 
@@ -344,7 +350,7 @@ def edit_section(topic: str, section: str):
                     (section.strip(), topic.strip()))
         con.commit()
     except Exception as e:
-        print(f"Error updating section: {e}")
+        logging.error(f"Error updating section: {e}")
     finally:
         con.close()
 
@@ -358,7 +364,7 @@ def update_lastreview(id, time):
                     (time, id))
         con.commit()
     except Exception as e:
-        print(f"Error updating last review: {e}")
+        logging.error(f"Error updating last review: {e}")
     finally:
         con.close()
 
@@ -377,7 +383,7 @@ def update_question(id, topic, question_text, answer, box, section, lastreview=N
                     (topic, question_text, answer, box, section, lastreview, id))
         con.commit()
     except Exception as e:
-        print(f"Error updating question: {e}")
+        logging.error(f"Error updating question: {e}")
     finally:
         con.close()
 
@@ -390,7 +396,7 @@ def get_question_by_id(id):
         question = con.execute(
             "SELECT * FROM questions WHERE id = ?", (id,)).fetchone()
     except Exception as e:
-        print(f"Error getting question by id: {e}")
+        logging.error(f"Error getting question by id: {e}")
         return None
     finally:
         con.close()
@@ -405,7 +411,7 @@ def delete_question(id):
         con.execute("DELETE FROM questions WHERE id = ?", (id,))
         con.commit()
     except Exception as e:
-        print(f"Error deleting question: {e}")
+        logging.error(f"Error deleting question: {e}")
     finally:
         con.close()
 
@@ -418,7 +424,7 @@ def deleteATopic(topic):
         con.execute("DELETE FROM questions WHERE topic = ?", (topic,))
         con.commit()
     except Exception as e:
-        print(f"Error deleting topic: {e}")
+        logging.error(f"Error deleting topic: {e}")
     finally:
         con.close()
 
@@ -433,7 +439,7 @@ def are_all_questions_mastered(section: str, topic: str) -> bool:
         count = con.execute(query, params).fetchone()[0]
         return count == 0
     except Exception as e:
-        print(f"Error checking if all questions are mastered: {e}")
+        logging.error(f"Error checking if all questions are mastered: {e}")
         return False
     finally:
         con.close()

@@ -31,8 +31,15 @@
         </div>
         <div id="topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlush_topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
           <div class="container ms-0">
-            <h4 class="row text-start col-12">{{ count }} Questions
-            <a class="row text-start col-12" href="{{ url_for('app.editTopic', topic=topic) }}">Edit Topic</a></h4>
+            <div class="row">
+              <h4 class="col-6 text-start">{{ count }} Questions</h4>
+              <div class="col-6 text-end">
+                <a class="btn btn-primary" href="{{ url_for('app.editTopic', topic=topic) }}">Edit Topic</a>
+                <form action="{{ url_for('app.reset', section=section, topic=topic) }}" method="POST" class="d-inline">
+                  <button type="submit" class="btn btn-warning">Move All Questions to Box 1</button>
+                </form>
+              </div>
+            </div>
           </div>
           <div class="accordion-body">
             <table class="table">
@@ -65,8 +72,8 @@
   </div>
 </div>
 {% endfor %}
-<div class="mt-5 mb-5 fixed-bottom">
-  <form action="{{ url_for('app.reset_db') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete and initialize the flashcards.db database? All Questions will be lost.');">
+<form action="{{ url_for('app.reset_db') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete and initialize the flashcards.db database? All Questions will be lost.');">
+    <div class="mt-5 mb-5">
     <button type="submit" class="btn btn-danger">Delete and Initialize Database</button>
   </form>
 </div>

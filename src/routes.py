@@ -8,7 +8,7 @@ bp = Blueprint('app', __name__)
 @bp.route("/", methods=("GET", "POST"))
 def index():
     topics_by_section = get_uncompleted_topics_by_section()
-    counts            = get_total_uncompleted_questions_per_topic()
+    counts = get_total_uncompleted_questions_per_topic()
     if topics_by_section is None or counts is None:
         return render_template("init_db.html")
     return render_template("index.html", topics_by_section=topics_by_section, counts=counts)
@@ -65,7 +65,7 @@ def answer(section, topic, id):
     update_box(id, score)
     time = datetime.now()
     update_lastreview(id, time)
-    query = get_next_question(section, topic, id)
+    query = get_question(section=section, topic=topic, min_id=id)
     if query is None:
         return redirect(url_for("app.index"))
 
@@ -134,12 +134,19 @@ def list():
 def edit(id):
     if request.method == "POST":
         topic = request.form["topic"]
-        question_text = request.form["question"]
+        question = request.form["question"]
         answer = request.form["answer"]
         box = request.form["box"]
         section = request.form["section"]
-        update_question(id, topic, question_text,
-                        answer, box, section)
+        reset_date = request.form.get("resetDate")
+
+        if reset_date:
+            lastreview = None
+        else:
+            lastreview = get_question_by_id(id)['LASTREVIEW']
+
+        update_question(id, topic, question,
+                        answer, box, section, lastreview)
         return redirect(url_for("app.list"))
     else:
         question = get_question_by_id(id)
@@ -179,4 +186,15 @@ def delete(id):
 @bp.route("/deleteTopic/<topic>", methods=("POST",))
 def deleteTopic(topic):
     deleteATopic(topic)
+    return redirect(url_for("app.list"))
+
+
+@bp.route("/reset/<section>/<topic>", methods=["POST"])
+def reset(section, topic):
+    if reset_questions(section, topic):
+        logging.debug(
+            f"All questions in section '{section}' and topic '{topic}' have been reset to box 1.", "success")
+    else:
+        logging.error(
+            f"Failed to reset questions in section '{section}' and topic '{topic}'.", "error")
     return redirect(url_for("app.list"))
