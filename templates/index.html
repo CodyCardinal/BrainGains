@@ -11,8 +11,15 @@
     </div>
     <div class="d-grid col text-start">
       <div class="card cardlist">
+        <h2 class="m-2">Instructions</h2>
+        <h4 class="m-2">
+          1. Take a Course<br />
+          2. Write Flashcards<br />
+          3. Quiz Daily<br />
+          4. Repeat until no questions are offered.<i class="bi bi-mortarboard"></i><br />
+        </h4>
         {% if topics_by_section %}
-        <h1 class="text-center">Choose a Topic!</h1>
+        <h2 class="m-2 pt-4">Quiz Topics!</h2>
         {% for section, topics in topics_by_section.items() %}
         <div class="row ms-2">
           <div class="col-lg-12">
@@ -28,8 +35,7 @@
             </div>
           </div>
         </div>
-        {% endfor %}
-        {% endif %}
+        {% endfor %} {% endif %}
       </div>
     </div>
   </div>
