@@ -267,6 +267,44 @@ def get_total_questions_per_topic():
     return sorted_counts
 
 
+def get_total_uncompleted_questions_per_topic():
+    con = get_db_connection()
+    if con is None:
+        return None
+    try:
+        counts = con.execute(
+            "SELECT TOPIC, COUNT(*) FROM QUESTIONS WHERE BOX < 6 GROUP BY TOPIC;").fetchall()
+    except Exception as e:
+        print(f"Error getting total questions per topic: {e}")
+        return None
+    finally:
+        con.close()
+    sorted_counts = {row[0]: row[1] for row in counts}
+    return sorted_counts
+
+
+def get_uncompleted_topics_by_section():
+    con = get_db_connection()
+    if con is None:
+        return None
+    try:
+        sections = con.execute(
+            "SELECT SECTION, TOPIC, COUNT(*) as COUNT FROM QUESTIONS WHERE BOX < 6 GROUP BY SECTION, TOPIC;").fetchall()
+    except Exception as e:
+        print(f"Error getting topics by section: {e}")
+        return None
+    finally:
+        con.close()
+    topics_by_section = {}
+    for row in sections:
+        section = row['SECTION']
+        topic = row['TOPIC']
+        count = row['COUNT']
+        if section not in topics_by_section:
+            topics_by_section[section] = []
+        topics_by_section[section].append({'topic': topic, 'count': count})
+    return topics_by_section
+
 def create_new_question(topic, question, answer, section):
     con = get_db_connection()
     if con is None:

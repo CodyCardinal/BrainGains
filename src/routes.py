@@ -7,8 +7,8 @@ bp = Blueprint('app', __name__)
 
 @bp.route("/", methods=("GET", "POST"))
 def index():
-    topics_by_section = get_topics_by_section()
-    counts = get_total_questions_per_topic()
+    topics_by_section = get_uncompleted_topics_by_section()
+    counts            = get_total_uncompleted_questions_per_topic()
     if topics_by_section is None or counts is None:
         return render_template("init_db.html")
     return render_template("index.html", topics_by_section=topics_by_section, counts=counts)
