@@ -105,3 +105,29 @@ pre code {
   white-space: pre-wrap;
   word-break: break-word;
 }
+
+.question-button-icon::before {
+  font-size: 2rem;
+}
+
+.show-answer-button-container {
+  z-index: 2;
+}
+
+.answer-button {
+  font-size: 1.5rem;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.answer-button-icon {
+  font-size: 1.75rem;
+  text-align: center;
+  margin-left: 0.5rem;
+}
+
+.indent {
+  margin-left: 5px;
+}

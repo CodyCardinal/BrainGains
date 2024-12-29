@@ -1,10 +1,23 @@
 import sqlite3
 import os
 from flask import flash
+from datetime import datetime
 from flask.cli import AppGroup
 
 db_cli = AppGroup("db")
 DATABASE_PATH = os.getenv("DATABASE_PATH", "/app/db/flashcards.db")
+
+leitner_boxes = 6
+
+leitner_intervals = {
+    1: 1,   # Box 1: Review every day
+    2: 2,   # Box 2: Review every 2 days
+    3: 4,   # Box 3: Review every 4 days
+    4: 8,   # Box 4: Review every 8 days
+    5: 16   # Box 5: Review every 16 days
+}
+
+# Database Handling
 
 
 def _initialize_db():
@@ -28,12 +41,12 @@ def _initialize_db():
     try:
         print("Inserting sample data into the database.")
         cur = connection.cursor()
-        cur.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH, SECTION) VALUES (?, ?, ?, ?, ?, ?)",
-                    (1, 'HTML', 'What does HTML Stand For?', 'HyperText Markup Language', 1, 'Web Development'))
-        cur.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH, SECTION) VALUES (?, ?, ?, ?, ?, ?)",
-                    (1, 'SQL', 'What does SQL stand for?', 'Structured Query Language', 1, 'Databases'))
-        cur.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH, SECTION) VALUES (?, ?, ?, ?, ?, ?)",
-                    (1, 'Python', 'What does Python stand for?', 'Python Programming Language', 1, 'Programming Languages'))
+        cur.execute("INSERT INTO QUESTIONS (TOPIC, QUESTION, ANSWER, BOX, SECTION, LASTREVIEW) VALUES (?, ?, ?, ?, ?, ?)",
+                    ('HTML', 'What does HTML Stand For?', 'HyperText Markup Language', 1, 'Web Development', None))
+        cur.execute("INSERT INTO QUESTIONS (TOPIC, QUESTION, ANSWER, BOX, SECTION, LASTREVIEW) VALUES (?, ?, ?, ?, ?, ?)",
+                    ('SQL', 'What does SQL stand for?', 'Structured Query Language', 1, 'Databases', None))
+        cur.execute("INSERT INTO QUESTIONS (TOPIC, QUESTION, ANSWER, BOX, SECTION, LASTREVIEW) VALUES (?, ?, ?, ?, ?, ?)",
+                    ('Python', 'What does Python stand for?', 'Python Programming Language', 1, 'Programming Languages', None))
         print("Database Initialized Successfully.")
     except Exception as e:
         print(f"Error Initializing Database: {e}")
@@ -68,26 +81,42 @@ def get_db_connection():
         return None
 
 
+# Queries
 def get_question(section: str = None, topic: str = None, id: int = None):
     con = get_db_connection()
     if con is None:
         return None
     try:
-        if section is None and topic is None and id is not None:
-            question = con.execute(
-                "SELECT * FROM questions WHERE sesh < 4 AND id = ?", (id,)).fetchone()
-        elif section is not None and topic is not None and id is None:
-            question = con.execute(
-                "SELECT * FROM questions WHERE sesh < 4 AND section = ? AND topic = ?", (section, topic)).fetchone()
-        else:
-            question = con.execute(
-                "SELECT * FROM questions WHERE id = ? AND section = ? AND topic = ?", (id, section, topic)).fetchone()
+        query = "SELECT * FROM questions WHERE box < ?"
+        params = [leitner_boxes]
+
+        if id is not None:
+            query += " AND id = ?"
+            params.append(id)
+        if section is not None:
+            query += " AND section = ?"
+            params.append(section)
+        if topic is not None:
+            query += " AND topic = ?"
+            params.append(topic)
+
+        questions = con.execute(query, params).fetchall()
+        today = datetime.now().date()
+
+        for question in questions:
+            if question['LASTREVIEW'] is None:
+                return question
+            last_review_date = datetime.strptime(
+                question['LASTREVIEW'], '%Y-%m-%d %H:%M:%S.%f').date()
+            interval = leitner_intervals.get(question['BOX'], 1)
+            if (today - last_review_date).days >= interval:
+                return question
     except Exception as e:
         print(f"Error getting question: {e}")
         return None
     finally:
         con.close()
-    return question
+    return None
 
 
 def get_next_question(section: str, topic: str, id: int):
@@ -95,29 +124,25 @@ def get_next_question(section: str, topic: str, id: int):
     if con is None:
         return None
     try:
-        question = con.execute(
-            "SELECT * FROM questions WHERE sesh < 4 AND id > ? AND section = ? AND topic = ?", (id, section, topic)).fetchone()
+        query = "SELECT * FROM questions WHERE box < ? AND id > ? AND section = ? AND topic = ?"
+        params = [leitner_boxes, id, section, topic]
+        questions = con.execute(query, params).fetchall()
+        today = datetime.now().date()
+
+        for question in questions:
+            if question['LASTREVIEW'] is None:
+                return question
+            last_review_date = datetime.strptime(
+                question['LASTREVIEW'], '%Y-%m-%d %H:%M:%S.%f').date()
+            interval = leitner_intervals.get(question['BOX'], 1)
+            if (today - last_review_date).days >= interval:
+                return question
     except Exception as e:
         print(f"Error getting next question: {e}")
         return None
     finally:
         con.close()
-    return question if question else None
-
-
-def update_score(id: int, score: int):
-    con = get_db_connection()
-    if con is None:
-        return False
-    try:
-        con.execute('UPDATE questions SET score = ? WHERE id = ?', (score, id))
-        con.commit()
-    except Exception as e:
-        print(f"Error updating score: {e}")
-        return False
-    finally:
-        con.close()
-    return True
+    return None
 
 
 def select(topic: str = None) -> list:
@@ -130,7 +155,7 @@ def select(topic: str = None) -> list:
                 "SELECT * FROM QUESTIONS GROUP BY TOPIC").fetchall()
         elif topic is not None:
             topics = con.execute(
-                "SELECT * FROM QUESTIONS WHERE SESH < 4 AND TOPIC = ?", (topic,)).fetchall()
+                "SELECT * FROM QUESTIONS WHERE BOX < ? AND TOPIC = ?", (leitner_boxes, topic)).fetchall()
         else:
             topics = con.execute("SELECT * FROM QUESTIONS").fetchall()
     except Exception as e:
@@ -153,49 +178,39 @@ def topicSelect() -> list:
     return topics
 
 
-def update_sesh(id: int, score: int):
-    sesh = get_sesh(id)
-    if sesh is None:
-        return None
-    sesh = sesh["sesh"]
+def update_box(id: int, score: int):
     con = get_db_connection()
     if con is None:
         return None
+    if score > leitner_boxes:
+        score = leitner_boxes
+    if score < 1:
+        score = 1
     try:
-        if score == 0:
-            sesh += 1
-            if sesh > 4:
-                sesh = 4
-            con.execute(
-                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
-        if score == 2:
-            sesh = sesh - 1
-            if sesh < 1:
-                sesh = 1
-            con.execute(
-                'UPDATE questions SET sesh = ? WHERE id = ?', (sesh, id))
+        con.execute(
+            'UPDATE questions SET box = ? WHERE id = ?', (score, id))
         con.commit()
     except Exception as e:
-        print(f"Error updating session: {e}")
+        print(f"Error updating box: {e}")
         return None
     finally:
         con.close()
-    return sesh
+    return score
 
 
-def get_sesh(id: int):
+def get_box(id: int):
     con = get_db_connection()
     if con is None:
         return None
     try:
-        sesh = con.execute(
-            "SELECT sesh FROM questions WHERE id = ?", (id,)).fetchone()
+        box = con.execute(
+            "SELECT box FROM questions WHERE id = ?", (id,)).fetchone()
     except Exception as e:
-        print(f"Error getting session: {e}")
+        print(f"Error getting box: {e}")
         return None
     finally:
         con.close()
-    return sesh
+    return box
 
 
 def get_topics_by_section():
@@ -257,8 +272,8 @@ def create_new_question(topic, question, answer, section):
     if con is None:
         return False
     try:
-        con.execute("INSERT INTO QUESTIONS (SCORE, TOPIC, QUESTION, ANSWER, SESH, SECTION) VALUES (?, ?, ?, ?, ?, ?)",
-                    (1, topic.strip(), question.strip(), answer.strip(), 1, section.strip()))
+        con.execute("INSERT INTO QUESTIONS (TOPIC, QUESTION, ANSWER, BOX, SECTION, LASTREVIEW) VALUES (?, ?, ?, ?, ?, ?)",
+                    (topic.strip(), question.strip(), answer.strip(), 1, section.strip(), None))
         con.commit()
     except Exception as e:
         print(f"Error creating new question: {e}")
@@ -296,15 +311,32 @@ def edit_section(topic: str, section: str):
         con.close()
 
 
-def update_question(id, topic, question_text, answer, score, session, section):
+def update_lastreview(id, time):
     con = get_db_connection()
     if con is None:
         return
-    if int(session) > 4:
-        session = 4
     try:
-        con.execute("UPDATE questions SET topic = ?, question = ?, answer = ?, score = ?, sesh = ?, section = ? WHERE id = ?",
-                    (topic, question_text, answer, score, session, section, id))
+        con.execute("UPDATE QUESTIONS SET LASTREVIEW = ? WHERE ID = ?",
+                    (time, id))
+        con.commit()
+    except Exception as e:
+        print(f"Error updating last review: {e}")
+    finally:
+        con.close()
+
+
+def update_question(id, topic, question_text, answer, box, section, lastreview=None):
+    con = get_db_connection()
+    if con is None:
+        return
+    if lastreview is None:
+        lastreview = datetime.now()
+
+    if int(box) > leitner_boxes:
+        box = leitner_boxes
+    try:
+        con.execute("UPDATE questions SET topic = ?, question = ?, answer = ?, box = ?, section = ?, lastreview = ? WHERE id = ?",
+                    (topic, question_text, answer, box, section, lastreview, id))
         con.commit()
     except Exception as e:
         print(f"Error updating question: {e}")
@@ -349,5 +381,21 @@ def deleteATopic(topic):
         con.commit()
     except Exception as e:
         print(f"Error deleting topic: {e}")
+    finally:
+        con.close()
+
+
+def are_all_questions_mastered(section: str, topic: str) -> bool:
+    con = get_db_connection()
+    if con is None:
+        return False
+    try:
+        query = "SELECT COUNT(*) FROM questions WHERE section = ? AND topic = ? AND box != 6"
+        params = [section, topic]
+        count = con.execute(query, params).fetchone()[0]
+        return count == 0
+    except Exception as e:
+        print(f"Error checking if all questions are mastered: {e}")
+        return False
     finally:
         con.close()

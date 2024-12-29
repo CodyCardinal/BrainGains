@@ -1,41 +1,68 @@
 {% extends "layout.html" %} {% block title %} {{ query.topic }} : {{ query.id }} {% endblock %} {% block main %}
 
-<div id="question-box" class="container">
-  <h2 id="question-text" class="text-start m-2">Question > {{ query.section|e }} > {{ query.topic|e }} > {{ query.id|e }}</h2>
+<div id="question-box" class="container position-relative">
+  <h5 id="question-text" class="text-start m-2">
+    Question > {{ query.section|e }} > {{ query.topic|e }} > {{ query.id|e }}
+  </h5>
   <div class="card">
     <div class="card-body">
       <h3 class="text-start">{{ query.question|safe }}</h3>
-      <button
-        id="answer-button"
-        class="btn btn-outline-dark btn-lg float-end mt-3"
-        data-bs-toggle="collapse"
-        href="#collapseExample"
-        role="button"
-        aria-expanded="false"
-        aria-controls="collapseExample"
-        onclick="revealAnswer()">
-        Show Answer &#x2B07;
-      </button>
+      <div class="text-end">Last Review > {{ query.lastreview|days_ago }}</div>
+      <div class="row align-items-end position-relative">
+        <div class="col text-center position-absolute start-50 translate-middle-x">
+          {{ query.box|question_boxes|safe }}
+        </div>
+        <div class="show-answer-button-container col text-end">
+          <button
+            id="show-answer-button"
+            class="btn btn-outline-dark btn-lg mt-3"
+            data-bs-toggle="collapse"
+            href="#collapseExample"
+            role="button"
+            aria-expanded="false"
+            aria-controls="collapseExample"
+            onclick="revealAnswer()">
+            Show Answer &#x2B07;
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-  <h2 id="answer-text" class="text-start m-2" style="display: none">Answer</h2>
+  <h5 id="answer-text" class="text-start m-2" style="display: none">Answer</h5>
   <div class="collapse card" id="collapseExample">
     <div class="card-body">
       <h3 class="text-start" id="answer">{{ query.answer|safe }}</h3>
-      <br />
-      <form action="/answer/{{ query.section }}/{{ query.topic }}/{{ query.id }}" method="POST">
-        <button name="score" value="3" class="btn btn-primary">Again</button>
-        <button name="score" value="2" class="btn btn-secondary">Hard</button>
-        <button name="score" value="1" class="btn btn-success">Good</button>
-        <button name="score" value="0" class="btn btn-info">Easy</button>
-      </form>
+      <div class="row justify-content-center align-items-end">
+        <div class="col-auto">
+          <form action="/answer/{{ query.section }}/{{ query.topic }}/{{ query.id }}" method="POST">
+            <button
+              name="score"
+              value="1"
+              class="answer-button btn btn-dark d-flex align-items-center justify-content-center flex-column">
+              <div class="text-center">Incorrect</div>
+            </button>
+          </form>
+        </div>
+
+        <div class="col-auto text-center mb-2 align-self-end">{{ query.box|answer_boxes|safe }}</div>
+
+        <div class="col-auto">
+          <form action="/answer/{{ query.section }}/{{ query.topic }}/{{ query.id }}" method="POST">
+            <button
+              name="score"
+              value="{{ query.box + 1}}"
+              class="answer-button btn btn-info d-flex align-items-center justify-content-center flex-column">
+              <div class="text-center"> Correct </div>
+            </button>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-
 <script>
   function revealAnswer() {
-    var button = document.getElementById("answer-button");
+    var button = document.getElementById("show-answer-button");
     button.innerHTML = "Answer Revealed";
     button.classList.add("disabled");
     button.setAttribute("aria-disabled", "true");

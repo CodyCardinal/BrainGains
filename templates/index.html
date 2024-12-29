@@ -2,6 +2,16 @@
 <div class="col">
   <div class="row">
     <div class="col-md-6">
+      <div class="text-start">
+        <h2 class="m-2">Instructions</h2>
+        <h4 class="m-2">
+          1. Take a Course<br />
+          2. Write Flashcards<br />
+          3. Quiz Daily<br />
+          4. Repeat until no questions are offered<br />
+          5. Mastered Quizzes are no longer listed <i class="bi bi-mortarboard-fill text-info"></i><br />
+        </h4>
+      </div>
       <div class="card">
         <img
           class="m-3"
@@ -12,9 +22,9 @@
     <div class="d-grid col text-start">
       <div class="card cardlist">
         {% if topics_by_section %}
-        <h1 class="text-center">Choose a Topic!</h1>
+        <h2 class="m-2">Quiz Topics!</h2>
         {% for section, topics in topics_by_section.items() %}
-        <div class="row ms-2">
+        <div class="row m-2">
           <div class="col-lg-12">
             <h3 class="section-header">{{ section }}</h3>
             <div class="row">
@@ -28,8 +38,7 @@
             </div>
           </div>
         </div>
-        {% endfor %}
-        {% endif %}
+        {% endfor %} {% endif %}
       </div>
     </div>
   </div>

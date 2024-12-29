@@ -1,37 +1,58 @@
-{% extends "layout.html" %}
+{% extends "layout.html" %} {% block title %} About {% endblock %} {% block main %}
 
-{% block title %}
-About
-{% endblock %}
-
-{% block main %}
-
-<p> Brain Gains is following the basic methods of the <a href="https://en.wikipedia.org/wiki/Leitner_system">Leitner
-        System</a>.
-    The use of spacing in our learning can lead to better retention of information. This is because the brain is better
-    at
-    remembering things that are spaced out over time. The Leitner System is a way to organize that spacing. This is
-    similar to how a muscle should be broken down, and given time to repair itself stronger.
-
-
-<p><img src="/static/2560px-Leitner_system_alternative.svg.png" alt="Leitner Learning System" width="500" height="300">
+<p class="text-start">
+  Brain Gains is a flashcard app that uses the basic methods of the
+  <a href="https://en.wikipedia.org/wiki/Leitner_system">Leitner System</a>. You can use it to write flash cards in
+  question and answer form. Then quiz yourself on the topic. By practicing recall with spaced repetition, we ensure we
+  retain the information better.
 </p>
 
-<p>
-    In the above method, questions are sorted into groups according to how easily the learner was able to recall the
-    answer. The learners
-    try to
-    recall the solution written to a question. Clicking to reveal the answer. Depending how difficult it was to recall
-    the answer, the learner can rate their recall difficulty. The recall rating then determines when the questions is
-    asked again.
+<p class="text-start">
+  The Leitner system is a method to schedule how often you might test recalling the answer to a flash card question.
+</p>
+<p><img src="/static/2560px-Leitner_system_alternative.svg.png" alt="Leitner Learning System" width="500" height="300" /></p>
 
+<h2 class="m-3"><strong>BrainGains</strong> helps keep all of this simple and organized for you.</h2><br />
 
+<h3 class="text-start mt-3 mb-3"><strong>Instructions</strong></h3><br />
+<p class="text-start indent">
+    <strong>1. Take a Course</strong><br />
+    <strong>2. Write Flashcards as Notes</strong><br />
+    <strong>3. Quiz Daily</strong><br />
+    <strong>4. Repeat until you're not offered any questions.</strong><br />
 </p>
 
-<img src="/static/Leitner_system_animation.gif" alt="Animated gif of Leitner Learning System">
-<p>
-    In the above gif, we see that the first session starts with one container of questions. In the second
-    session you're asked harder questions from the first session and the second containers questions. This process
-    repeats until you're phased each question out into the final 5th container.
+<h3 class="text-start mt-3 mb-3"><strong>How it Works</strong></h3><br />
+<p class="text-start indent">
+  <strong>Session 1:</strong><br />
+  To start, all questions are in Box 1.<br />
+  Quiz on those questions, Correct questions move up one box, incorrect questions go back to Box 1.<br />
+  You will rate how you did on the question, choosing correct or incorrect.
 </p>
+
+<p class="text-start indent">
+  <strong>Session 2:</strong><br />
+  The next day you would quiz, using Box 1 and Box 2 questions.<br />
+  Correct questions move up one box, incorrect questions go back to Box 1.
+</p>
+
+<p class="text-start indent">
+  <strong>Session 3:</strong><br />
+  Day 3, quiz Box 1, Box 2, and Box 3 together.<br />
+  Correct questions move up one box, incorrect questions go back to Box 1.
+</p>
+
+<p class="text-start indent">Leitner suggests the following spacing:</p>
+<ul class="text-start">
+  <li>Box 1: Review daily.</li>
+  <li>Box 2: Review every 2 days.</li>
+  <li>Box 3: Review every 4 days.</li>
+  <li>Box 4: Review every 8 days.</li>
+  <li>Box 5: Review every 16 days.</li>
+</ul>
+
+<p><img src="/static/Leitner_system_animation.gif" alt="Animated gif of Leitner Learning System" /></p>
+
+<p>This process repeats over time until you've graduated the question, it moves into Box 6, and you will no longer be asked it.<br/>
+
 {% endblock %}

@@ -1,13 +1,16 @@
-{% extends "layout.html" %} 
-{% block title %} List {% endblock %} 
-{% block main %} 
-{% for section, topics in topics_by_section.items() %}
+{% extends "layout.html" %}
+{% block title %} List {% endblock %}
+{% block main %}
+
 <div class="row">
   <div class="col-lg-12">
+    <div class="text-start"><h2>Mastered Quizzes = <i class="bi bi-mortarboard-fill text-info m1"></i></h2></div>
+    {% for section, topics in topics_by_section.items() %}
     <h3>{{ section }}</h3>
     {% for topic_info in topics %}
     {% set topic = topic_info.topic %}
     {% set count = topic_info.count %}
+    
     <div class="accordion accordion-flush" {% set safe_topic = topic|replace(" ", "_")|replace("(", "")|replace(")", "")|replace(",", "")|replace("/", "")|replace("\\", "")|replace("&", "and") %} id="accordionFlush_topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
       <div class="accordion-item">
         <div class="accordion-header">
@@ -18,7 +21,12 @@
             data-bs-target="#topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}"
             aria-expanded="false"
             aria-controls="topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
-            <h2>{{ topic }}</h2>
+            <h2>
+              {{ topic }}
+              {% if mastered_topics[(section, topic)] %}
+                <i class="bi bi-mortarboard-fill text-info m1"></i>
+              {% endif %}
+            </h2>
           </button>
         </div>
         <div id="topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}" class="accordion-collapse collapse" data-bs-parent="#accordionFlush_topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
@@ -31,10 +39,9 @@
               <thead>
                 <tr>
                   <th class="text-center">id</th>
-                  <th class="text-center">Score</th>
                   <th class="text-center">Question</th>
                   <th class="text-start">Answer</th>
-                  <th class="text-start">Session</th>
+                  <th class="text-start">Box</th>
                 </tr>
               </thead>
               <tbody>
@@ -43,10 +50,9 @@
                   <td class="text-center">
                     <a href="{{ url_for('app.edit', id=question.id) }}">{{ question.id }}</a>
                   </td>
-                  <td class="text-center">{{ question.score }}</td>
                   <td class="text-start">{{ question.question }}</td>
                   <td class="text-start">{{ question.answer }}</td>
-                  <td class="text-center">{{ question.sesh }}</td>
+                  <td class="text-center">{{ question.box }}</td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -58,7 +64,7 @@
     {% endfor %}
   </div>
 </div>
-{% endfor %} 
+{% endfor %}
 <div class="mt-5 mb-5 fixed-bottom">
   <form action="{{ url_for('app.reset_db') }}" method="POST" onsubmit="return confirm('Are you sure you want to delete and initialize the flashcards.db database? All Questions will be lost.');">
     <button type="submit" class="btn btn-danger">Delete and Initialize Database</button>
