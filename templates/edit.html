@@ -28,6 +28,17 @@ Edit Card
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="text-start col-md-5 mt-4">
+            <p><a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown Docs</a></p>
+            <p><a href="https://www.markdownguide.org/extended-syntax/#fenced-code-blocks" target="_blank">Fenced Code Blocks</a></p>
+        </div>
+    <div class="form-group text-start">
+        <label for="toggle-tab">Shift + Tab Spacing</label>
+        <button id="toggle-tab" class="btn btn-outline-secondary" type="button">
+            <i id="toggle-icon" class="bi bi-toggle-on"></i>
+        </button>
+    </div>
     <div class="form-group">
         <label for="question">Question</label>
         <textarea class="form-control" id="question" name="question" rows="7">{{ question.question }}</textarea>
@@ -36,11 +47,49 @@ Edit Card
         <label for="answer">Answer</label>
         <textarea class="form-control" id="answer" name="answer" rows="7">{{ question.answer }}</textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Update</button>
+    <div class="text-center pt-4">
+        <button type="submit" class="btn btn-primary d-inline-block">Update Question {{ question.id }}</button>
+    </div>
 </form>
 <br>
 <br>
-<form action="/delete/{{ question.id }}" method="POST" color="red">
-    <button type="submit" class="btn btn-danger" value="delete">Delete</button>
+<form action="/delete/{{ question.id }}" method="POST" color="red" class="pt-4 text-end">
+    
+    <button type="submit" class="btn btn-danger" value="delete">Delete Question {{ question.id }}</button>
 </form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let tabEnabled = true;
+
+        function enableTab(id) {
+            var el = document.getElementById(id);
+            el.addEventListener('keydown', function(e) {
+                if (tabEnabled && e.key === 'Tab' && e.shiftKey) {
+                    e.preventDefault();
+                    var start           = this.selectionStart;
+                    var end             = this.selectionEnd;
+                    this.value          = this.value.substring(0, start) + "\t" + this.value.substring(end);
+                    this.selectionStart = this.selectionEnd = start + 1;
+                }
+            });
+        }
+
+        enableTab('question');
+        enableTab('answer');
+
+        document.getElementById('toggle-tab').addEventListener('click', function(e) {
+            e.preventDefault();
+            tabEnabled = !tabEnabled;
+            const icon = document.getElementById('toggle-icon');
+            if (tabEnabled) {
+                icon.classList.remove('bi-toggle-off');
+                icon.classList.add('bi-toggle-on');
+            } else {
+                icon.classList.remove('bi-toggle-on');
+                icon.classList.add('bi-toggle-off');
+            }
+        });
+    });
+</script>
 {% endblock %}

@@ -5,8 +5,8 @@
     Question > {{ query.section|e }} > {{ query.topic|e }} > {{ query.id|e }}
   </h5>
   <div class="card">
-    <div class="card-body">
-      <h3 class="text-start">{{ query.question|safe }}</h3>
+    <div class="card-body text-start">
+      <h3>{{ query.question|safe }}</h3>
       <div class="text-end">Last Review > {{ query.lastreview|days_ago }}</div>
       <div class="row align-items-end position-relative">
         <div class="col text-center position-absolute start-50 translate-middle-x">
@@ -30,7 +30,7 @@
   </div>
   <h5 id="answer-text" class="text-start m-2" style="display: none">Answer</h5>
   <div class="collapse card" id="collapseExample">
-    <div class="card-body">
+    <div class="card-body text-start">
       <h3 class="text-start" id="answer">{{ query.answer|safe }}</h3>
       <div class="row justify-content-center align-items-end">
         <div class="col-auto">
@@ -69,6 +69,7 @@
 
     var answerText = document.getElementById("answer-text");
     answerText.style.display = "block";
+    answerText.classList.add("text-start");
   }
 </script>
 {% endblock %}
