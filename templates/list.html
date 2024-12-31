@@ -34,6 +34,7 @@
             <div class="row">
               <h4 class="col-6 text-start">{{ count }} Questions</h4>
               <div class="col-6 text-end">
+                <a class="btn btn-success" href="{{ url_for('app.question', section=section, topic=topic) }}">Take the Quiz</a>
                 <a class="btn btn-primary" href="{{ url_for('app.editTopic', topic=topic) }}">Edit Topic</a>
                 <form action="{{ url_for('app.reset', section=section, topic=topic) }}" method="POST" class="d-inline">
                   <button type="submit" class="btn btn-warning">Move All Questions to Box 1</button>
