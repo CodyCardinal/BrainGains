@@ -180,7 +180,7 @@ def editTopic(topic):
 def delete(id):
     question = get_question_by_id(id)
     if question is None:
-        logging.error("Question not found when trying to delete.")
+        logging.error(f"Question {id} not found when trying to delete.")
     else:
         delete_question(id)
     return redirect(url_for("app.list"))
