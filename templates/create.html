@@ -39,7 +39,7 @@ Create
     <div class="row">
         <div class="text-start col-md-5 mt-4">
             <p><a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown Docs</a></p>
-            <p><a href=https://www.markdownguide.org/extended-syntax/#fenced-code-blocks" target="_blank">Fenced Code Blocks</a></p>
+            <p><a href="https://www.markdownguide.org/extended-syntax/#fenced-code-blocks" target="_blank">Fenced Code Blocks</a></p>
         </div>
         <div class="col-md-2"></div>
         <div class="col-md-5">
@@ -50,9 +50,9 @@ Create
         </div>
     </div>
     <div class="form-group text-start">
-        <label for="toggle-tab">Tab Spacing</label>
+        <label for="toggle-tab">Shift + Tab Spacing</label>
         <button id="toggle-tab" class="btn btn-outline-secondary" type="button">
-            <i id="toggle-icon" class="bi bi-toggle-off"></i>
+            <i id="toggle-icon" class="bi bi-toggle-on"></i>
         </button>
     </div>
     <div class="form-group">
@@ -72,20 +72,16 @@ Create
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let tabEnabled = false;
+        let tabEnabled = true;
 
         function enableTab(id) {
             var el = document.getElementById(id);
             el.addEventListener('keydown', function(e) {
-                if (tabEnabled && e.key === 'Tab') {
+                if (tabEnabled && e.key === 'Tab' && e.shiftKey) {
                     e.preventDefault();
-                    var start = this.selectionStart;
-                    var end = this.selectionEnd;
-
-                    // set textarea value to: text before caret + tab + text after caret
-                    this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
-
-                    // put caret at right position again
+                    var start           = this.selectionStart;
+                    var end             = this.selectionEnd;
+                    this.value          = this.value.substring(0, start) + "\t" + this.value.substring(end);
                     this.selectionStart = this.selectionEnd = start + 1;
                 }
             });
