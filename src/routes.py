@@ -1,5 +1,6 @@
 from flask import Blueprint, redirect, url_for, render_template, request, flash
 import markdown2
+import logging
 from .functions import *
 
 bp = Blueprint('app', __name__)
@@ -46,7 +47,7 @@ def question(section: str = None, topic: str = None, id=None):
             return redirect(url_for('app.question', section=section, topic=topic, id=query['id']))
 
     if query:
-        query_dict = dict(query)  # Convert sqlite3.Row to dictionary
+        query_dict = dict(query)
         lowerCaseQuery = {k.lower(): v for k, v in query_dict.items()}
         markdownQuery = lowerCaseQuery
         markdownQuery['question'] = markdown2.markdown(
@@ -55,7 +56,7 @@ def question(section: str = None, topic: str = None, id=None):
             markdownQuery['answer'], extras=["fenced-code-blocks"])
         return render_template("question.html", query=markdownQuery)
     else:
-        flash("Question not found", "error")
+        flash('Good Job, you don\'t have any more questions to answer for today\'s quiz. You should check back daily, as a quiz listed here is not yet mastered <i class="bi bi-mortarboard-fill text-info m1"></i>', 'success')
         return redirect(url_for("app.index"))
 
 
@@ -152,7 +153,8 @@ def edit(id):
         question = get_question_by_id(id)
 
         if question is None:
-            flash("Question not found", "error")
+            logging.error(
+                f"Question with id {id} not found when trying to edit.")
             return redirect(url_for("app.list"))
         return render_template("edit.html", question=question)
 
@@ -168,7 +170,8 @@ def editTopic(topic):
     if request.method == "GET":
         section = get_section_by_topic(topic)
         if section is None:
-            flash("Section not found", "error")
+            logging.error(
+                f"Section {section} not found when trying get edit topic {topic}.")
             return redirect(url_for("app.list"))
         return render_template("editTopic.html", topic=topic, section=section)
 
@@ -177,7 +180,7 @@ def editTopic(topic):
 def delete(id):
     question = get_question_by_id(id)
     if question is None:
-        flash("Question not found", "error")
+        logging.error("Question not found when trying to delete.")
     else:
         delete_question(id)
     return redirect(url_for("app.list"))
