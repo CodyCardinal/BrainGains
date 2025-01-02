@@ -2,7 +2,7 @@
 <div class="col">
   <div class="row">
     <div class="col-md-6">
-      <div class="text-start">
+      <div class="card text-start mb-2">
         <h2 class="m-2">Instructions</h2>
         <h4 class="m-2">
           1. Take a Course<br />
@@ -33,9 +33,7 @@
             <div class="row">
               {% for topic_info in topics %} {% set topic = topic_info.topic %}
               <div class="col-md-8">
-                <a href="/question/{{ section }}/{{ topic }}" class="btn btn-outline-dark btn-block topic-header"
-                  >{{ topic }}</a
-                >
+                <a href="/question/{{ section }}/{{ topic }}" class="quiz-button btn btn-outline-light btn-block topic-header">{{ topic }}</a>
               </div>
               {% endfor %}
             </div>

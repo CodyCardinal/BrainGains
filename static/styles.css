@@ -66,12 +66,11 @@ nav .navbar-brand .green {
   margin-right: 0;
 }
 
-body {
-  background-color: #f7f7f7 !important;
+[data-bs-theme="dark"] .darkmode-image-filter {
+  filter: brightness(0.7) contrast(1.2);
 }
 
 .cardlist {
-  background-color: #f7f7f7 !important;
   border: 1px solid #e6e6e6;
   border-radius: 0.25rem;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
