@@ -11,11 +11,11 @@
     {% set topic = topic_info.topic %}
     {% set count = topic_info.count %}
     
-    <div class="accordion accordion-flush" {% set safe_topic = topic|replace(" ", "_")|replace("(", "")|replace(")", "")|replace(",", "")|replace("/", "")|replace("\\", "")|replace("&", "and") %} id="accordionFlush_topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
+    <div class="accordion" {% set safe_topic = topic|replace(" ", "_")|replace("(", "")|replace(")", "")|replace(",", "")|replace("/", "")|replace("\\", "")|replace("&", "and") %} id="accordionFlush_topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}">
       <div class="accordion-item">
         <div class="accordion-header">
           <button
-            class="accordion-button collapsed"
+            class="accordion-button collapsed mb-1"
             type="button"
             data-bs-toggle="collapse"
             data-bs-target="#topic_{{ section|replace(' ', '_') }}_{{ safe_topic }}"
