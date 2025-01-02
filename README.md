@@ -26,6 +26,7 @@ In the above method, questions are sorted into groups according to how easily th
 ```sh
    docker run -p 5000:5000 -v .:/app/db -e DATABASE_PATH=/app/db/flashcards.db codesxcodes/braingains:latest
 ```
+5. Open your browser to `http://localhost:5000/`
 
 ## Launch Locally via Python and Flask
 
@@ -57,7 +58,7 @@ Instructions
 
 ## Newish Features and Bugfixes
 
-- The Leitner System is implemented automatically. Quiz daily until you run out of questions.
+- The Leitner 5 Box System is implemented automatically. Quiz daily until you run out of questions.
 - Braingains is now published as a [Docker Container](https://hub.docker.com/repository/docker/codesxcodes/braingains/)!
 
 ## Possible Features List/To Do
