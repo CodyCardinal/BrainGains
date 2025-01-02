@@ -10,9 +10,7 @@ BrainGains is a flashcard app that uses the basic methods of the [Leitner System
 
 The Leitner system is a method to schedule how often you might test recalling the answer to a flash card question, braingains automates that scheduling for you.
 
-<div style="background-color: lightgrey; padding: 10px;">
-   <img src="https://github.com/CodyCardinal/BrainGains/blob/main/static/2560px-Leitner_system_alternative.svg.png" alt="Leitner Learning System">
-</div>
+![Leitner Learning System](https://github.com/CodyCardinal/BrainGains/blob/main/static/2560px-Leitner_system_alternative.svg.png)
 
 In the above method, questions are sorted into groups according to how easily the learner was able to recall the answer. The learners try to recall the solution written to a question. Clicking to reveal the answer. The learner then chooses correct or incorrect, which determines when or if the questions is asked again.
 
