@@ -5,35 +5,69 @@ Edit Card
 {% endblock %}
 
 {% block main %}
-<form action="/edit/{{ question.id }}" method="POST">
-    <div class="form-row mx-auto" style="width: 500px;">
-        <div class="form-group col-md-6">
-            <label for="section">Section</label>
-            <input type="text" class="form-control" id="section" name="section" value="{{ question.section }}">
-        </div>        
-        <div class="form-group col-md-6">
-            <label for="topic">Topic</label>
-            <input type="text" class="form-control" id="topic" name="topic" value="{{ question.topic }}">
+<form class="form-inline" action="/edit/{{ question.id }}" method="POST">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="form-group mx-sm-3 mb-2">
+                {% if topics_by_section %}
+                <label for="existingsectionandtopic" class="sr-only">Existing Section and Topic</label>
+                <select class="form-control" id="existingsectionandtopic" name="existingsectionandtopic">
+                    <option disabled>Choose</option>
+                    {% for section, topics in topics_by_section.items() %}
+                        {% for topic_info in topics %}
+                            {% set topic = topic_info.topic %}
+                            <option value="{{ section }} > {{ topic }}"{% if section == question.section and topic == question.topic %} selected{% endif %}>{{ section }} > {{ topic }} > {{ counts[topic] }} Questions</option>
+                        {% endfor %}
+                    {% endfor %}
+                </select>
+                {% endif %}
+            </div>
         </div>
-        <div class="form-group col-md-6">
-            <label for="box">Box</label>
-            <input type="number" min="1" max="6" class="form-control" id="box" name="box" value="{{ question.box }}">
-        </div>
-        <div class="form-group col-md-6">
-            <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="resetDate" name="resetDate">
-            <label class="form-check-label" for="resetDate">
-                Reset Last Reviewed Date
-            </label>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <div class="form-group mx-sm-3 mb-2">
+                <label for="newsection" class="sr-only">New Section</label>
+                <input type="text" class="form-control" id="newsection" name="newsection" placeholder="default">
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="text-start col-md-5 mt-4">
-            <p><a href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown Docs</a></p>
-            <p><a href="https://www.markdownguide.org/extended-syntax/#fenced-code-blocks" target="_blank">Fenced Code Blocks</a></p>
+    <div class="row mt-2">
+        <div class="text-align-center">
+            <h4>OR</h4>
         </div>
-    <div class="form-group text-start">
+    </div>
+    <div class="row">
+        <div class="col-md-5">
+            <div class="form-group">
+                <h5>Change Box {{ question.box|question_boxes|safe }}</h5>
+                <select class="form-select text-center" aria-label="Box Select" name="box">
+                    <option selected>{{ question.box }}</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                  </select>
+            </div>
+            <div class="form-group d-flex pt-4">
+                <div class="form-check-reverse text-start">
+                <label class="form-check-label" for="resetDate">
+                    Last Reviewed ( {{ question.lastreview|days_ago }} ) > Reset Last Review:
+                </label>
+                <input class="form-check-input" type="checkbox" id="resetDate" name="resetDate">
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="col-md-5">
+            <div class="form-group mx-sm-3 mb-2 pt-3">
+                <label for="newtopic" class="sr-only">New Topic</label>
+                <input type="text" class="form-control" id="newtopic" name="newtopic" placeholder="New Topic">
+            </div>
+        </div>
+    </div>
+    <div class="form-group text-start pt-4 mt-4">
         <label for="toggle-tab">Shift + Tab Spacing</label>
         <button id="toggle-tab" class="btn btn-outline-secondary" type="button">
             <i id="toggle-icon" class="bi bi-toggle-on"></i>
@@ -41,55 +75,32 @@ Edit Card
     </div>
     <div class="form-group">
         <label for="question">Question</label>
-        <textarea class="form-control" id="question" name="question" rows="7">{{ question.question }}</textarea>
+        <textarea class="form-control" id="question" name="question" rows="14" autofocus>{{ question.question }}</textarea>
     </div>
     <div class="form-group">
         <label for="answer">Answer</label>
-        <textarea class="form-control" id="answer" name="answer" rows="7">{{ question.answer }}</textarea>
+        <textarea class="form-control" id="answer" name="answer" rows="14">{{ question.answer }}</textarea>
     </div>
-    <div class="text-center pt-4">
-        <button type="submit" class="btn btn-primary d-inline-block">Update Question {{ question.id }}</button>
+    <div class="form-group pt-4">
+        <div class="row">
+            <div class="col text-start mt-4">
+                <div class="card">
+                    <h5 class="card-title m-2">docs</h5>
+                    <p><a class="m-2" href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown Docs</a></p>
+                    <p><a class="m-2" href="https://www.markdownguide.org/extended-syntax/#fenced-code-blocks" target="_blank">Fenced Code Blocks</a></p>
+                </div>
+            </div>
+            <div class="col">                
+                    <button type="submit" class="btn btn-primary mb-2" value="Submit">Update Question {{ question.id }}</button>
+                </div>
+            <div class="col">
+                <form action="/delete/{{ question.id }}" method="POST" color="red" class="text-end">
+                    <button type="submit" class="btn btn-danger" value="delete">Delete Question {{ question.id }}</button>
+                </form>
+            </div>
+        </div>
     </div>
 </form>
-<br>
-<br>
-<form action="/delete/{{ question.id }}" method="POST" color="red" class="pt-4 text-end">
-    
-    <button type="submit" class="btn btn-danger" value="delete">Delete Question {{ question.id }}</button>
-</form>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let tabEnabled = true;
-
-        function enableTab(id) {
-            var el = document.getElementById(id);
-            el.addEventListener('keydown', function(e) {
-                if (tabEnabled && e.key === 'Tab' && e.shiftKey) {
-                    e.preventDefault();
-                    var start           = this.selectionStart;
-                    var end             = this.selectionEnd;
-                    this.value          = this.value.substring(0, start) + "\t" + this.value.substring(end);
-                    this.selectionStart = this.selectionEnd = start + 1;
-                }
-            });
-        }
-
-        enableTab('question');
-        enableTab('answer');
-
-        document.getElementById('toggle-tab').addEventListener('click', function(e) {
-            e.preventDefault();
-            tabEnabled = !tabEnabled;
-            const icon = document.getElementById('toggle-icon');
-            if (tabEnabled) {
-                icon.classList.remove('bi-toggle-off');
-                icon.classList.add('bi-toggle-on');
-            } else {
-                icon.classList.remove('bi-toggle-on');
-                icon.classList.add('bi-toggle-off');
-            }
-        });
-    });
-</script>
+<script src="/static/markdowntoggle.js"></script>
 {% endblock %}

@@ -134,20 +134,22 @@ def list():
 @bp.route("/edit/<int:id>", methods=("GET", "POST"))
 def edit(id):
     if request.method == "POST":
-        topic = request.form["topic"]
-        question = request.form["question"]
-        answer = request.form["answer"]
-        box = request.form["box"]
-        section = request.form["section"]
-        reset_date = request.form.get("resetDate")
+        existing      = request.form.get("existingsectionandtopic")
+        new_section   = request.form.get("newsection")
+        new_topic     = request.form.get("newtopic")
+        question      = request.form["question"]
+        answer        = request.form["answer"]
+        box           = request.form["box"]
+        reset_date    = request.form.get("resetDate")
+        section       = new_section if new_section else existing.split(" > ")[0]
+        topic         = new_topic if new_topic else existing.split(" > ")[1]
 
         if reset_date:
             lastreview = None
         else:
             lastreview = get_question_by_id(id)['LASTREVIEW']
 
-        update_question(id, topic, question,
-                        answer, box, section, lastreview)
+        update_question(id, topic, question, answer, box, section, lastreview)
         return redirect(url_for("app.list"))
     else:
         question = get_question_by_id(id)
@@ -156,7 +158,9 @@ def edit(id):
             logging.error(
                 f"Question with id {id} not found when trying to edit.")
             return redirect(url_for("app.list"))
-        return render_template("edit.html", question=question)
+        topics_by_section = get_topics_by_section()
+        counts = get_total_questions_per_topic()
+        return render_template("edit.html", question=question, topics_by_section=topics_by_section, counts=counts)
 
 
 @bp.route("/editTopic/<path:topic>", methods=("GET", "POST"))
