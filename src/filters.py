@@ -63,7 +63,7 @@ def jinja_answer_boxes(current_box):
                         "<i class='question-button-icon bi bi-1-square-fill text-success'></i>")
                 else:
                     icons.append(
-                        "<i class='question-button-icon bi bi-1-square-fill text-dark'></i>")
+                        "<i class='question-button-icon bi bi-1-square'></i>")
             else:
                 icons.append(
                     f"<i class='question-button-icon bi bi-{i}-square text-secondary'></i>")
