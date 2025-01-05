@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const themeToggle = document.querySelector("#theme-toggle");
+  const themeToggle   = document.querySelector("#theme-toggle");
   const themeElements = document.querySelectorAll(".theme-toggle, .quiz-button");
 
   const updateThemeClasses = (theme) => {
@@ -22,14 +22,14 @@ document.addEventListener("DOMContentLoaded", function () {
     if (storedTheme) {
       return storedTheme;
     }
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark": "light";
   };
 
   const setTheme = (theme) => {
     if (theme === "auto") {
       document.documentElement.setAttribute(
         "data-bs-theme",
-        window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+        window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark": "light"
       );
     } else {
       document.documentElement.setAttribute("data-bs-theme", theme);
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     themeToggle.addEventListener("click", () => {
       const currentTheme = document.documentElement.getAttribute("data-bs-theme");
-      const newTheme = currentTheme === "dark" ? "light" : "dark";
+      const newTheme     = currentTheme === "dark" ? "light" : "dark";
       setStoredTheme(newTheme);
       setTheme(newTheme);
       showActiveTheme(newTheme, true);
