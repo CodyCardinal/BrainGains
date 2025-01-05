@@ -6,10 +6,10 @@ document.addEventListener("DOMContentLoaded", function () {
     el.addEventListener("keydown", function (e) {
       if (tabEnabled && e.key === "Tab" && e.shiftKey) {
         e.preventDefault();
-        const start         = this.selectionStart;
-        const end           = this.selectionEnd;
-        this.value          = this.value.substring(0, start) + "\t" + this.value.substring(end);
-        this.selectionStart = this.selectionEnd = start + 1;
+        const start               = this.selectionStart;
+        const end                 = this.selectionEnd;
+              this.value          = this.value.substring(0, start) + "\t" + this.value.substring(end);
+              this.selectionStart = this.selectionEnd = start + 1;
       }
     });
   }
@@ -19,9 +19,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   document.getElementById("toggle-tab").addEventListener("click", function (e) {
     e.preventDefault();
-    tabEnabled   = !tabEnabled;
-    const icon   = document.getElementById("toggle-icon");
-    const button = document.getElementById("toggle-tab");
+          tabEnabled = !tabEnabled;
+    const icon       = document.getElementById("toggle-icon");
+    const button     = document.getElementById("toggle-tab");
     if (tabEnabled) {
       icon.classList.remove("bi-toggle-off");
       icon.classList.add("bi-toggle-on");

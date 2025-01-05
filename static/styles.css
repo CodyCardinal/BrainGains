@@ -22,6 +22,11 @@ nav .navbar-brand .green {
   z-index: 1000;
 }
 
+.ide-width {
+  max-width: 220ch;
+  margin: 0 auto;
+}
+
 #question-text {
   margin-bottom: 20px;
 }

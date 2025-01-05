@@ -1,6 +1,6 @@
 {% extends "layout.html" %} {% block title %} {{ query.topic }} : {{ query.id }} {% endblock %} {% block main %}
 
-<div id="question-box" class="container position-relative">
+<div id="question-box" class="container position-relative ide-width">
   <h5 id="question-text" class="text-start m-2">
     Question > {{ query.section|e }} > {{ query.topic|e }} > {{ query.id|e }}
   </h5>
@@ -60,16 +60,5 @@
     </div>
   </div>
 </div>
-<script>
-  function revealAnswer() {
-    var button = document.getElementById("show-answer-button");
-    button.innerHTML = "Answer Revealed";
-    button.classList.add("disabled");
-    button.setAttribute("aria-disabled", "true");
-
-    var answerText = document.getElementById("answer-text");
-    answerText.style.display = "block";
-    answerText.classList.add("text-start");
-  }
-</script>
+<script src="/script/revealAnswer.js"></script>
 {% endblock %}
