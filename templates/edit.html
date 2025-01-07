@@ -5,137 +5,132 @@ Edit Card
 {% endblock %}
 
 {% block main %}
-<form class="form-inline" action="/edit/{{ question.id }}" method="POST">
-    <div class="row">
-        <div class="col text-center">
-            <div class="form-group mx-sm-3 mb-2">
-                {% if topics_by_section %}
-                <label for="existingsectionandtopic" class="mb-1">Existing Section > Existing Topic > Question Count</label>
-                <select class="form-control text-center" id="existingsectionandtopic" name="existingsectionandtopic">
-                    <option disabled>Choose</option>
-                    {% for section, topics in topics_by_section.items() %}
-                        {% for topic_info in topics %}
-                            {% set topic = topic_info.topic %}
-                            <option value="{{ section }} > {{ topic }}"{% if section == question.section and topic == question.topic %} selected{% endif %}>{{ section }} > {{ topic }} > {{ counts[topic] }} Questions</option>
-                        {% endfor %}
-                    {% endfor %}
-                </select>
-                {% endif %}
-            </div>
-        </div>
+<!-- Main form for update fields -->
+<form id="update-form" action="/edit/{{ question.id }}" method="POST">
+  <div class="row">
+    <div class="col text-center">
+      <div class="form-group mx-sm-3 mb-2">
+        {% if topics_by_section %}
+        <label for="existingsectionandtopic" class="mb-1">Existing Section > Existing Topic > Question Count</label>
+        <select class="form-control text-center" id="existingsectionandtopic" name="existingsectionandtopic">
+          <option disabled>Choose</option>
+          {% for section, topics in topics_by_section.items() %}
+            {% for topic_info in topics %}
+              {% set topic = topic_info.topic %}
+              <option value="{{ section }} > {{ topic }}"{% if section == question.section and topic == question.topic %} selected{% endif %}>{{ section }} > {{ topic }} > {{ counts[topic] }} Questions</option>
+            {% endfor %}
+          {% endfor %}
+        </select>
+        {% endif %}
+      </div>
     </div>
-    <div class="row mt-2">
-        <div class="col-md-5"></div>
-        <div class="col-md-2 text-center">
-            <h4>OR</h4>
-        </div>
-        <div class="col-md-5"></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-5"></div>
+    <div class="col-md-2 text-center">
+      <h4>OR</h4>
     </div>
-    <div class="row mt-2">
-        <div class="col-md-5 text-center">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="newsection" class="mb-1">New Section</label>
-                <input type="text" class="form-control" id="newsection" name="newsection" placeholder="New Section">
-            </div>
-        </div>
-        <div class="col-md-2"></div>
-        <div class="col-md-5 text-center">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="newtopic" class="mb-1">New Topic</label>
-                <input type="text" class="form-control" id="newtopic" name="newtopic" placeholder="New Topic">
-            </div>
-        </div>
+    <div class="col-md-5"></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-5 text-center">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="newsection" class="mb-1">New Section</label>
+        <input type="text" class="form-control" id="newsection" name="newsection" placeholder="New Section">
+      </div>
     </div>
-    <div class="row mt-2">
-        <div class="col-md-5 text-center">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="boxSelector">Change Box</label>
-            </div>
-        </div>
-        <div class="col-md-2"></div>
-        <div class="col-md-5 text-center">
-            <div class="form-group mx-sm-3 mb-2">
-                <label for="resetDate">Reset Last Reviewed > ( {{ question.lastreview|days_ago }} )</label>
-            </div>            
-        </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 text-center">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="newtopic" class="mb-1">New Topic</label>
+        <input type="text" class="form-control" id="newtopic" name="newtopic" placeholder="New Topic">
+      </div>
     </div>
-    <div class="row">
-        <div class="col-md-5 text-center">
-            <div class="form-group mx-sm-3 mb-2">
-                <div class="row">
-                    <div class="col">
-                            <div>
-                                {{ question.box|question_boxes|safe }}
-                            </div>
-                    </div>
-                    <div class="col">
-                        <select id="boxSelector" class="form-select text-center" aria-label="Box Select" name="box">
-                            <option selected>{{ question.box }}</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-2"></div>
-        <div class="col-md-5">
-            <div class="form-group d-flex justify-content-center pt-2">
-                <div class="form-check-reverse">
-                    <input class="form-check-input" type="checkbox" id="resetDate" name="resetDate">
-                </div>
-            </div>
-        </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-5 text-center">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="boxSelector">Change Box</label>
+      </div>
     </div>
-    <div class="row pt-4">
-        <div class="col">
-            <div class="form-group text-start pt-4">
-                <label for="toggle-tab">Shift + Tab Spacing</label>
-                <button id="toggle-tab" class="btn btn-outline-success" type="button">
-                    <i id="toggle-icon" class="bi bi-toggle-on"></i>
-                </button>
-            </div>
-        </div>
-        <div class="col-md-2">
-        </div>
-        <div class="col-md-5">
-        </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5 text-center">
+      <div class="form-group mx-sm-3 mb-2">
+        <label for="resetDate">Reset Last Reviewed > ( {{ question.lastreview|days_ago }} )</label>
+      </div>            
     </div>
-    <div class="form-group">
-        <label for="question">Question</label>
-        <textarea class="form-control" id="question" name="question" rows="14" autofocus>{{ question.question }}</textarea>
-    </div>
-    <div class="form-group">
-        <label for="answer">Answer</label>
-        <textarea class="form-control" id="answer" name="answer" rows="14">{{ question.answer }}</textarea>
-    </div>
-    <div class="form-group pt-4 pb-4">
+  </div>
+  <div class="row">
+    <div class="col-md-5 text-center">
+      <div class="form-group mx-sm-3 mb-2">
         <div class="row">
-            <div class="col"></div>
-            <div class="col">                
-                <button type="submit" class="btn btn-primary mb-2" value="Submit">Update Question {{ question.id }}</button>
+          <div class="col">
+            <div>
+              {{ question.box|question_boxes|safe }}
             </div>
-            <div class="col">
-                <form action="/delete/{{ question.id }}" method="POST" color="red" class="text-end">
-                    <button type="submit" class="btn btn-danger" value="delete">Delete Question {{ question.id }}</button>
-                </form>
-            </div>
+          </div>
+          <div class="col">
+            <select id="boxSelector" class="form-select text-center" aria-label="Box Select" name="box">
+              <option selected>{{ question.box }}</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
         </div>
-        <div class="row">
-            <div class="col-auto text-start mt-4">
-                <div class="card">
-                    <h5 class="card-title m-2">docs</h5>
-                    <p><a class="m-2" href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown Docs</a></p>
-                    <p><a class="m-2" href="https://www.markdownguide.org/extended-syntax/#fenced-code-blocks" target="_blank">Fenced Code Blocks</a></p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5">
+      <div class="form-group d-flex justify-content-center pt-2">
+        <div class="form-check-reverse">
+          <input class="form-check-input" type="checkbox" id="resetDate" name="resetDate">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row pt-4">
+    <div class="col">
+      <div class="form-group text-start pt-4">
+        <label for="toggle-tab">Shift + Tab Spacing</label>
+        <button id="toggle-tab" class="btn btn-outline-success" type="button">
+          <i id="toggle-icon" class="bi bi-toggle-on"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-5"></div>
+  </div>
+  <div class="form-group">
+    <label for="question">Question</label>
+    <textarea class="form-control" id="question" name="question" rows="14" autofocus>{{ question.question }}</textarea>
+  </div>
+  <div class="form-group">
+    <label for="answer">Answer</label>
+    <textarea class="form-control" id="answer" name="answer" rows="14">{{ question.answer }}</textarea>
+  </div>
 </form>
+
+<div class="row pt-4">
+  <div class="col-md-4">
+    <div class="card">
+      <h5 class="card-title m-2">docs</h5>
+      <p><a class="m-2" href="https://www.markdownguide.org/basic-syntax/" target="_blank">Markdown Docs</a></p>
+      <p><a class="m-2" href="https://www.markdownguide.org/extended-syntax/#fenced-code-blocks" target="_blank">Fenced Code Blocks</a></p>
+    </div>
+  </div>
+  <div class="col-md-4 d-flex justify-content-center align-items-center">
+    <button form="update-form" type="submit" class="btn btn-primary">Update Question {{ question.id }}</button>
+  </div>
+  <div class="col-md-4 d-flex justify-content-end align-items-center">
+    <form action="/delete/{{ question.id }}" method="POST">
+      <button type="submit" class="btn btn-danger">Delete Question {{ question.id }}</button>
+    </form>
+  </div>
+</div>
 
 <script src="/static/markdownToggle.js"></script>
 {% endblock %}

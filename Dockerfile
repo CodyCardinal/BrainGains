@@ -15,7 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 ENV FLASK_APP=app.py
 ENV FLASK_ENV=development
 ENV FLASK_DEBUG=1
-ENV FLASK_SECRET_KEY=${FLASK_SECRET_KEY}
 ENV FLASK_RUN_HOST=0.0.0.0
 ENV DATABASE_PATH=/app/db/flashcards.db
 
